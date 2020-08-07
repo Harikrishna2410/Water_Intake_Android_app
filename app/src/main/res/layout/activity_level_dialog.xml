@@ -9,7 +9,7 @@
   <androidx.cardview.widget.CardView
     android:id="@+id/cardView2"
     android:layout_width="0dp"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginLeft="8dp"
     android:layout_marginEnd="8dp"
@@ -27,41 +27,35 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-      <com.kevalpatel2106.rulerpicker.RulerValuePicker
-        android:id="@+id/ruler_picker"
+      <ListView
+        android:id="@+id/activity_level_list"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimary"
-        app:indicator_color="@android:color/white"
-        app:indicator_interval="14dp"
-        app:indicator_width="2dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/activity_level"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:max_value="150"
-        app:min_value="35"
-        app:notch_color="@android:color/white"
-        app:ruler_text_size="6sp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
       <TextView
-        android:id="@+id/Ruler_Title"
-        android:layout_width="0dp"
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:text="Select Your Weight In Kg"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/ruler_picker"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center_horizontal"
+        android:text="What is your Activity Level"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnknownId" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
   </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
