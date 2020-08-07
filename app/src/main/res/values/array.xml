@@ -11,5 +11,9 @@
     <item>Some-what Active</item>
     <item>Totally Active</item>
   </string-array>
+  <string-array name="weather">
+    <item>Hot</item>
+    <item>Cold</item>
+  </string-array>
 
 </resources>
