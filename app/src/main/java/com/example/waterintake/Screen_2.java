@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.kevalpatel2106.rulerpicker.RulerValuePicker;
 import com.kevalpatel2106.rulerpicker.RulerValuePickerListener;
 
+import java.text.DecimalFormat;
+
 import lib.kingja.switchbutton.SwitchMultiButton;
 
 public class Screen_2 extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class Screen_2 extends AppCompatActivity {
   RulerValuePicker RVP;
   ListView activity_level_list,weather_list;
   CardView calculate_intake_btn;
-  String sex;
+  String sex,weight;
   sharedPreference sp;
 
   @Override
@@ -71,6 +73,7 @@ public class Screen_2 extends AppCompatActivity {
           public void onIntermediateValueChange(final int selectedValue) {
             user_weight.setText(Integer.toString(selectedValue)+" Kg");
             user_weight.setError(null);
+            weight = Integer.toString(selectedValue);
             Ruler_Title.setText("Your Weight "+ Integer.toString(selectedValue) +" Kg");
 
           }
@@ -156,13 +159,6 @@ public class Screen_2 extends AppCompatActivity {
     calculate_intake_btn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-//        ConstraintLayout weight_button,activity_button,weather_button;
-//        TextView user_weight,user_activity_level,weather,Ruler_Title,activity_level_title;
-//        EditText user_name;
-//        SwitchMultiButton gender;
-//        RulerValuePicker RVP;
-//        ListView activity_level_list,weather_list;
-//        CardView calculate_intake_btn;
 
         Boolean validation = true;
         String uname = user_name.getText().toString();
@@ -218,12 +214,42 @@ public class Screen_2 extends AppCompatActivity {
         }
 
         if (validation.equals(true)){
-          Toast.makeText(Screen_2.this, "Data Stored In SharedPreference", Toast.LENGTH_SHORT).show();
+//          Toast.makeText(Screen_2.this, "Data Stored In SharedPreference", Toast.LENGTH_SHORT).show();
           sp.editor_client_pref.putString("username",uname);
           sp.editor_client_pref.putString("gender",sex);
-          sp.editor_client_pref.putString("weight",uweight);
+          sp.editor_client_pref.putString("weight",weight);
           sp.editor_client_pref.putString("activity_level",uactivity);
           sp.editor_client_pref.putString("weather",uweather);
+
+          int resultInMl;
+          float genderMultiplier = (sex == "Male") ? 20 : 10;
+          float resultInOunces = Integer.parseInt(weight) * genderMultiplier / 28.3f;
+          float activityAdder = 0;
+
+          switch (user_activity_level.getText().toString()){
+            case "Steady":
+              activityAdder = 100;
+              break;
+            case "Some-what Active":
+              activityAdder = 150;
+              break;
+            case "Totally Active":
+              activityAdder = 200;
+              break;
+
+          }
+
+          DecimalFormat df = new DecimalFormat("#.##");
+
+
+          resultInOunces += activityAdder;
+          resultInMl = Math.round(resultInOunces * 500 / 40);
+          double resultInL = (float) (resultInMl * 0.001);
+
+          float Intakes =  Float.valueOf(df.format(resultInL));
+
+          Toast.makeText(Screen_2.this, "Calculated Intakes In Liter is "+Intakes+"L", Toast.LENGTH_SHORT).show();
+          sp.editor_client_pref.putFloat("Intakes",Intakes);
           sp.editor_client_pref.commit();
 
           Intent intent = new Intent(Screen_2.this,Screen_3.class);
@@ -251,7 +277,7 @@ public class Screen_2 extends AppCompatActivity {
 
     gender = findViewById(R.id.gender);
 
-    calculate_intake_btn = findViewById(R.id.Card_Button_Calculate);
+    calculate_intake_btn = findViewById(R.id.card_button_leta_instake_screen_4);
 
   }
 }
