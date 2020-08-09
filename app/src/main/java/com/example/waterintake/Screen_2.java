@@ -220,6 +220,7 @@ public class Screen_2 extends AppCompatActivity {
           sp.editor_client_pref.putString("weight",weight);
           sp.editor_client_pref.putString("activity_level",uactivity);
           sp.editor_client_pref.putString("weather",uweather);
+          sp.editor_client_pref.putFloat("todays_intake",0);
 
           int resultInMl;
           float genderMultiplier = (sex == "Male") ? 20 : 10;
