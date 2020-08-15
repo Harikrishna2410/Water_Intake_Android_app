@@ -6,36 +6,18 @@
   android:layout_height="match_parent"
   tools:context=".Screen_3">
 
-  <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/guideline9"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="0.10123119" />
-
-  <ImageView
-    android:id="@+id/back_press_screen_3"
-    android:layout_width="20dp"
-    android:layout_height="20dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
-    app:layout_constraintBottom_toTopOf="@+id/guideline9"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/back" />
-
   <TextView
     android:id="@+id/inteke_level_main_title_screen_3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
+    android:layout_marginTop="120dp"
     android:fontFamily="@font/roboto_medium"
     android:text="2.46L"
     android:textColor="#000000"
-    android:textSize="120dp"
+    android:textSize="100dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="@+id/guideline9" />
+    app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
     android:id="@+id/sub_title_1"
@@ -69,7 +51,7 @@
     android:id="@+id/card_button_leta_instake_screen_4"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="80dp"
+    android:layout_marginBottom="70dp"
     app:cardBackgroundColor="#6AB6F6"
     app:cardCornerRadius="7dp"
     app:layout_constraintBottom_toBottomOf="parent"

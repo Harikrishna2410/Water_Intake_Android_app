@@ -18,6 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.realm_db.Users;
+
+import java.util.List;
+
+import io.realm.DynamicRealm;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class Screen_3 extends AppCompatActivity {
 
@@ -25,8 +34,9 @@ public class Screen_3 extends AppCompatActivity {
   EditText manual_intake;
   CardView btn,btn_done_dialog;
   sharedPreference sp;
-  float Intakes;
+  int Intakes;
   ImageView back_press;
+  Realm realm;
 
 
   @Override
@@ -36,20 +46,30 @@ public class Screen_3 extends AppCompatActivity {
     controlBinding();
     sp = new sharedPreference(Screen_3.this);
 
-    Intakes = sp.client_pref.getFloat("Intakes",0);
+    final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
+    Realm.setDefaultConfiguration(configuration);
+    Realm.getInstance(configuration);
 
-    main_title.setText(Intakes+"L");
-    sub_title_1.setText("Your Daily Intake is "+Intakes+"L");
+    Realm.init(Screen_3.this);
+
+    realm = Realm.getDefaultInstance();
+
+    RealmQuery<Users> query = realm.where(Users.class);
+    query.equalTo("id",1);
+    RealmResults<Users> results = query.findAll();
+
+    for (int i = 0; i < results.size() ; i++){
+      Intakes = results.get(i).getGoal();
+      Toast.makeText(this, String.valueOf(Intakes), Toast.LENGTH_SHORT).show();
+    }
+//    Intakes = query.get()
+
+    main_title.setText(Intakes+"ml");
+    sub_title_1.setText("Your Daily Intake is "+Intakes+"ml");
 
     new Boom(main_title);
     new Boom(btn);
 
-    back_press.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        onBackPressed();
-      }
-    });
 
     // region Main Title Click Manual Intake Dialog
     main_title.setOnClickListener(new View.OnClickListener() {
@@ -70,11 +90,24 @@ public class Screen_3 extends AppCompatActivity {
         btn_done_dialog.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View view) {
-            manual_intake.getText().toString();
-            sp.editor_client_pref.putFloat("Intakes",Float.valueOf(manual_intake.getText().toString()));
-            sp.editor_client_pref.commit();
+            int m_intake = Integer.parseInt(manual_intake.getText().toString());
 
-            Intakes = sp.client_pref.getFloat("Intakes",0);
+            realm.beginTransaction();
+            Users users = realm.where(Users.class).equalTo("id",1).findFirst();
+            users.setGoal(m_intake);
+            realm.copyToRealmOrUpdate(users);
+            realm.commitTransaction();
+
+
+//            sp.editor_client_pref.putFloat("Intakes",Float.valueOf(manual_intake.getText().toString()));
+//            sp.editor_client_pref.commit();
+//
+//            Intakes = sp.client_pref.getFloat("Intakes",0);
+            RealmResults<Users> query = realm.where(Users.class).equalTo("id", 1).findAll();
+
+            for (int i = 0; i < query.size() ; i++){
+              Intakes = query.get(i).getGoal();
+            }
             main_title.setText(Intakes+"L");
             sub_title_1.setText("Your Daily Intake is "+Intakes+"L");
 
@@ -100,7 +133,6 @@ public class Screen_3 extends AppCompatActivity {
     sub_title_1 = findViewById(R.id.sub_title_1);
     sub_title_2 = findViewById(R.id.sub_title_2);
     btn = findViewById(R.id.card_button_leta_instake_screen_4);
-    back_press = findViewById(R.id.back_press_screen_3);
 
   }
 }

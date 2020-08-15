@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,7 +14,7 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 public class Home_screen extends AppCompatActivity {
 
   ChipNavigationBar bottomBar;
-  FragmentManager fragmentManager ;
+  FragmentManager fragmentManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +22,13 @@ public class Home_screen extends AppCompatActivity {
     setContentView(R.layout.activity_home_screen);
     bottomBar = findViewById(R.id.bottomBar);
 
-    if (savedInstanceState == null){
-      bottomBar.setItemSelected(R.id.home,true);
+
+    if (savedInstanceState == null) {
+      bottomBar.setItemSelected(R.id.home, true);
       fragmentManager = getSupportFragmentManager();
       home_fregment hfreg = new home_fregment();
       fragmentManager.beginTransaction()
-        .replace(R.id.fragment_comtainer,hfreg)
+        .replace(R.id.fragment_comtainer, hfreg)
         .commit();
     }
 
@@ -48,15 +50,13 @@ public class Home_screen extends AppCompatActivity {
             break;
         }
 
-        if (fragment!=null){
-          fragmentManager= getSupportFragmentManager();
+        if (fragment != null) {
+          fragmentManager = getSupportFragmentManager();
           fragmentManager.beginTransaction()
-            .replace(R.id.fragment_comtainer,fragment)
+            .replace(R.id.fragment_comtainer, fragment)
             .commit();
-        }
-        else
-        {
-          Log.e("Error","Error in Creating Fragment");
+        } else {
+          Log.e("Error", "Error in Creating Fragment");
         }
       }
     });

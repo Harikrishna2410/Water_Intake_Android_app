@@ -21,17 +21,7 @@ public class Screen_4 extends AppCompatActivity {
     setContentView(R.layout.activity_screen_4);
 
     btn = findViewById(R.id.card_button_leta_instake_screen_4);
-    back_press = findViewById(R.id.back_press_screen_4);
     new Boom(btn);
-    new Boom(back_press);
-
-
-    back_press.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        onBackPressed();
-      }
-    });
 
     btn.setOnClickListener(new View.OnClickListener() {
       @Override

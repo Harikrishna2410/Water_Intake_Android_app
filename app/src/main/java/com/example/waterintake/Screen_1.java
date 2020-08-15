@@ -10,22 +10,31 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.waterintake.realm_db.Users;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class Screen_1 extends AppCompatActivity {
 
   CardView btn;
+
+
 
   @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_screen_1);
+
     controlBind();
 
     btn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Intent intent = new Intent(Screen_1.this ,Screen_2.class);
+        Intent intent = new Intent(Screen_1.this, Screen_2.class);
         startActivity(intent);
       }
     });
@@ -36,9 +45,9 @@ public class Screen_1 extends AppCompatActivity {
 
   }
 
-  public void controlBind(){
+  public void controlBind() {
 
-    btn =(CardView) findViewById(R.id.Card_Button_Continue);
+    btn = (CardView) findViewById(R.id.Card_Button_Continue);
 
   }
 }

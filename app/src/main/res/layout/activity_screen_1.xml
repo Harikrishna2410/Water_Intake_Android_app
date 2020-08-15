@@ -52,7 +52,7 @@
     android:id="@+id/Card_Button_Continue"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="120dp"
+    android:layout_marginBottom="70dp"
     app:cardBackgroundColor="#6AB6F6"
     app:cardCornerRadius="7dp"
     app:layout_constraintBottom_toBottomOf="parent"

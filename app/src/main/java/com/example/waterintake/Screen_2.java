@@ -18,14 +18,16 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
+import com.example.waterintake.realm_db.Users;
 import com.kevalpatel2106.rulerpicker.RulerValuePicker;
 import com.kevalpatel2106.rulerpicker.RulerValuePickerListener;
 
 import java.text.DecimalFormat;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import lib.kingja.switchbutton.SwitchMultiButton;
 
 public class Screen_2 extends AppCompatActivity {
@@ -37,8 +39,10 @@ public class Screen_2 extends AppCompatActivity {
   RulerValuePicker RVP;
   ListView activity_level_list,weather_list;
   CardView calculate_intake_btn;
-  String sex,weight;
+  String sex;
   sharedPreference sp;
+  Realm realm;
+  int weight;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class Screen_2 extends AppCompatActivity {
           public void onIntermediateValueChange(final int selectedValue) {
             user_weight.setText(Integer.toString(selectedValue)+" Kg");
             user_weight.setError(null);
-            weight = Integer.toString(selectedValue);
+            weight = selectedValue;
             Ruler_Title.setText("Your Weight "+ Integer.toString(selectedValue) +" Kg");
 
           }
@@ -118,34 +122,6 @@ public class Screen_2 extends AppCompatActivity {
       }
     });
 
-    weather_button.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        final Dialog d = new Dialog(Screen_2.this);
-        d.setTitle("NumberPicker");
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setContentView(R.layout.activity_level_dialog);
-        d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        d.getWindow().setGravity(Gravity.BOTTOM);
-        weather_list = d.findViewById(R.id.activity_level_list);
-        weather_list.setAdapter(adapter1);
-        activity_level_title = d.findViewById(R.id.activity_level_title);
-        activity_level_title.setText("Choose Weather");
-        weather_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            String activity = weather_List[i];
-//            Toast.makeText(Screen_2.this, activity, Toast.LENGTH_SHORT).show();
-            weather.setText(activity);
-            weather.setError(null);
-            d.dismiss();
-          }
-        });
-        d.show();
-      }
-    });
-
     gender.clearSelection();
 
     gender.setOnSwitchListener(new SwitchMultiButton.OnSwitchListener() {
@@ -160,11 +136,18 @@ public class Screen_2 extends AppCompatActivity {
       @Override
       public void onClick(View view) {
 
+        final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
+        Realm.setDefaultConfiguration(configuration);
+        Realm.getInstance(configuration);
+
+        Realm.init(Screen_2.this);
+
+        realm = Realm.getDefaultInstance();
+
         Boolean validation = true;
         String uname = user_name.getText().toString();
         String uweight = user_weight.getText().toString();
         String uactivity = user_activity_level.getText().toString();
-        String uweather = weather.getText().toString();
 
         if (uname.isEmpty()){
 //          user_name.requestFocus();
@@ -184,7 +167,7 @@ public class Screen_2 extends AppCompatActivity {
           validation = true;
           gender_warning.setVisibility(View.GONE);
         }
-        if (uweight.isEmpty()){
+        if (uweight == null){
 //          user_weight.requestFocus();
           user_weight.setError("Field Should not be Empty");
           validation = false;
@@ -203,28 +186,30 @@ public class Screen_2 extends AppCompatActivity {
           validation = true;
           user_activity_level.setError(null);
         }
-        if (uweather.isEmpty()){
-//          weather.requestFocus();
-          validation = false;
-          weather.setError("Field Should not be Empty");
-        }
-        else {
-          validation = true;
-          weather.setError(null);
-        }
 
         if (validation.equals(true)){
 //          Toast.makeText(Screen_2.this, "Data Stored In SharedPreference", Toast.LENGTH_SHORT).show();
-          sp.editor_client_pref.putString("username",uname);
-          sp.editor_client_pref.putString("gender",sex);
-          sp.editor_client_pref.putString("weight",weight);
-          sp.editor_client_pref.putString("activity_level",uactivity);
-          sp.editor_client_pref.putString("weather",uweather);
-          sp.editor_client_pref.putFloat("todays_intake",0);
+          Number current_id = realm.where(Users.class).max("id");
+
+          int nextId;
+          if (current_id == null) {
+            nextId = 1;
+          } else {
+            nextId = current_id.intValue() + 1;
+          }
+
+
+//
+//          sp.editor_client_pref.putString("username",uname);
+//          sp.editor_client_pref.putString("gender",sex);
+//          sp.editor_client_pref.putString("weight",Integer.parseInt(uweight));
+//          sp.editor_client_pref.putString("activity_level",uactivity);
+//          sp.editor_client_pref.putString("weather",uweather);
+//          sp.editor_client_pref.putFloat("todays_intake",0);
 
           int resultInMl;
           float genderMultiplier = (sex == "Male") ? 20 : 10;
-          float resultInOunces = Integer.parseInt(weight) * genderMultiplier / 28.3f;
+          float resultInOunces = weight * genderMultiplier / 28.3f;
           float activityAdder = 0;
 
           switch (user_activity_level.getText().toString()){
@@ -247,11 +232,16 @@ public class Screen_2 extends AppCompatActivity {
           resultInMl = Math.round(resultInOunces * 500 / 40);
           double resultInL = (float) (resultInMl * 0.001);
 
-          float Intakes =  Float.valueOf(df.format(resultInL));
+//          int Intakes = Integer.parseInt(df.format(resultInL));
 
-          Toast.makeText(Screen_2.this, "Calculated Intakes In Liter is "+Intakes+"L", Toast.LENGTH_SHORT).show();
-          sp.editor_client_pref.putFloat("Intakes",Intakes);
-          sp.editor_client_pref.commit();
+//          Toast.makeText(Screen_2.this, "Calculated Intakes In Liter is "+Intakes+"L", Toast.LENGTH_SHORT).show();
+//          sp.editor_client_pref.putFloat("Intakes",Intakes);
+//          sp.editor_client_pref.commit();
+
+          realm.beginTransaction();
+          Users u = new Users(nextId,uname,sex,weight,uactivity,resultInMl);
+          realm.copyToRealm(u);
+          realm.commitTransaction();
 
           Intent intent = new Intent(Screen_2.this,Screen_3.class);
           startActivity(intent);
@@ -267,11 +257,9 @@ public class Screen_2 extends AppCompatActivity {
 
     weight_button = findViewById(R.id.weight_button);
     activity_button = findViewById(R.id.activity_button);
-    weather_button = findViewById(R.id.weather_button);
 
     user_weight = findViewById(R.id.user_weight);
     user_activity_level =findViewById(R.id.uesr_activity_level);
-    weather = findViewById(R.id.weather);
     gender_warning = findViewById(R.id.gender_warning);
 
     user_name = findViewById(R.id.user_name);
