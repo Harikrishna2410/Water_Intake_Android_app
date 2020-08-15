@@ -1,24 +1,28 @@
 package com.example.waterintake.realm_db;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
-public class user extends RealmObject {
+public class Users extends RealmObject {
 
+  @PrimaryKey
   int id;
   String name;
   String gender;
   int weight;
   String activity_lvl;
+  int goal;
 
-  public user() {
+  public Users() {
   }
 
-  public user(int id, String name, String gender, int weight, String activity_lvl) {
+  public Users(int id, String name, String gender, int weight, String activity_lvl,int goal) {
     this.id = id;
     this.name = name;
     this.gender = gender;
     this.weight = weight;
     this.activity_lvl = activity_lvl;
+    this.goal = goal;
   }
 
   public int getId() {
@@ -59,5 +63,13 @@ public class user extends RealmObject {
 
   public void setActivity_lvl(String activity_lvl) {
     this.activity_lvl = activity_lvl;
+  }
+
+  public int getGoal() {
+    return goal;
+  }
+
+  public void setGoal(int goal) {
+    this.goal = goal;
   }
 }
