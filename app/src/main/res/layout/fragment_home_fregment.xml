@@ -8,27 +8,40 @@
   android:background="@color/white"
   tools:context=".home_fregment">
 
-    <androidx.constraintlayout.widget.Guideline
-      android:id="@+id/guideline12"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      wave:layout_constraintGuide_percent="0.91928864" />
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline12"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintGuide_percent="0.90" />
 
-    <!-- TODO: Update blank fragment layout -->
+  <!-- TODO: Update blank fragment layout -->
+
+  <androidx.core.widget.NestedScrollView
+    android:id="@+id/scrollView2"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintBottom_toTopOf="@+id/guideline12"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/date_change_home_frag"
-      android:layout_width="80dp"
-      android:layout_height="80dp"
-      android:layout_marginTop="32dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="5dp"
-      android:padding="5dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/title_home_fragment"
-      app:layout_constraintTop_toTopOf="parent">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/date_change_home_frag"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_circle_screen_4"
+        android:backgroundTint="@color/white"
+        android:elevation="5dp"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
           android:id="@+id/imageView5"
@@ -54,32 +67,60 @@
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-      android:id="@+id/title_home_fragment"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="32dp"
-      android:fontFamily="@font/montserrat"
-      android:text="Your Daily Water Intake"
-      android:textColor="@color/black"
-      android:textSize="15dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      <TextView
+        android:id="@+id/title_home_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Your Daily Water Intake"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-      android:id="@+id/linearLayout"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="15dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/title_home_fragment">
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_circle_screen_4"
+        android:backgroundTint="@color/white"
+        android:elevation="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+          android:id="@+id/intake_level_home_frag"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+
+          android:fontFamily="@font/roboto"
+          android:gravity="center"
+          android:text="2.24L"
+          android:textColor="@color/black"
+          android:textSize="15dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_circle_screen_4"
+        android:backgroundTint="@color/white"
+        android:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_home_fragment">
 
         <me.itangqi.waveloadingview.WaveLoadingView
           android:id="@+id/waveLoadingView"
@@ -99,156 +140,51 @@
           app:wlv_waveAmplitude="70"
           app:wlv_waveColor="@color/colorAccent" />
 
-    </LinearLayout>
+      </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/card_glass_water_drink_rv"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_marginStart="36dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="5dp"
-      android:orientation="vertical"
-      android:visibility="gone"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <ImageView
-          android:id="@+id/custom_intake_icon"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:layout_marginTop="16dp"
-          android:src="@drawable/drink"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-          android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/todays_histroy"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:fontFamily="@font/montserrat"
-          android:text="250 ml"
-          android:textColor="@color/black"
-          android:textSize="14sp"
+          android:overScrollMode="never"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/custom_intake_icon" />
+          app:layout_constraintTop_toBottomOf="@+id/curent_history" />
+
+      <TextView
+        android:id="@+id/curent_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current Histroy"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/custom_intake"/>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/custom_intake"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.core.widget.NestedScrollView>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/bottle_water_drink_home_fragment"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_marginEnd="36dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="5dp"
-      android:orientation="vertical"
-      android:visibility="gone"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-        <ImageView
-          android:id="@+id/imageView78"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:layout_marginTop="16dp"
-          android:src="@drawable/water_bottle"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:fontFamily="@font/montserrat"
-          android:text="500 ml"
-          android:textColor="@color/black"
-          android:textSize="14sp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/imageView78" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:id="@+id/custom_water_drink_home_fragment"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_marginTop="8dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="5dp"
-      android:orientation="vertical"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/custom_intake">
-
-        <ImageView
-          android:id="@+id/imageView26"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
-          android:layout_marginTop="16dp"
-          android:src="@drawable/plus"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:fontFamily="@font/montserrat"
-          android:gravity="center"
-          android:text="Add Custom"
-          android:textColor="@color/black"
-          android:textSize="12sp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/imageView26" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="80dp"
-      android:layout_height="80dp"
-      android:layout_marginTop="32dp"
-      android:background="@drawable/round_circle_screen_4"
-      android:backgroundTint="@color/white"
-      android:elevation="15dp"
-      app:layout_constraintEnd_toStartOf="@+id/title_home_fragment"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-          android:id="@+id/intake_level_home_frag"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-
-          android:fontFamily="@font/roboto"
-          android:gravity="center"
-          android:text="2.24L"
-          android:textColor="@color/black"
-          android:textSize="15dp"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/custom_intake"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="16dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/floatingActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:clickable="true"
+    android:src="@drawable/plus"
+    app:layout_constraintBottom_toTopOf="@+id/guideline12"
+    app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,6 +33,7 @@ import com.astritveliu.boom.Boom;
 import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.realm_db.Users;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.reflect.Array;
 import java.text.DecimalFormat;
@@ -45,6 +46,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
@@ -57,7 +59,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
   ImageView back_press;
   TextView full_date, intake_level_home_frag;
-  ConstraintLayout date_change, glass_water, bottle_water, custom_water;
+  ConstraintLayout date_change, glass_water, bottle_water;
   WaveLoadingView waveLoadingView;
   Context ctx;
   int year, month, day;
@@ -72,6 +74,10 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   int id[] = {1, 2, 3};
   ViewGroup root;
   RealmResults<Users> query;
+  FloatingActionButton floatingActionButton;
+  RecyclerView todays_history;
+  todays_history_rv_adapter todays_history_rv_adapter;
+  RealmResults<Daily_history> daily_histories;
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,6 +88,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   private String mParam1;
   private String mParam2;
   private PersianDatePickerDialog persianDatePickerDialog = null;
+  private Context context;
 
   /**
    * Use this factory method to create a new instance of
@@ -124,12 +131,19 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     root = (ViewGroup) inflater.inflate(R.layout.fragment_home_fregment, container, false);
     date_change = root.findViewById(R.id.date_change_home_frag);
     glass_water = root.findViewById(R.id.card_glass_water_drink_rv);
-    bottle_water = root.findViewById(R.id.bottle_water_drink_home_fragment);
-    custom_water = root.findViewById(R.id.custom_water_drink_home_fragment);
     waveLoadingView = root.findViewById(R.id.waveLoadingView);
+    WaveVariable.setWaveLoadingView(waveLoadingView);
     full_date = root.findViewById(R.id.full_date);
     intake_level_home_frag = root.findViewById(R.id.intake_level_home_frag);
+    floatingActionButton = root.findViewById(R.id.floatingActionButton);
+    todays_history = root.findViewById(R.id.todays_histroy);
     DecimalFormat df2 = new DecimalFormat("#.##");
+
+
+    Calendar c = Calendar.getInstance();
+    year = c.get(Calendar.YEAR);
+    month = c.get(Calendar.MONTH);
+    day = c.get(Calendar.DAY_OF_MONTH);
 
     final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
     Realm.setDefaultConfiguration(configuration);
@@ -138,6 +152,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     Realm.init(getActivity());
 
     realm = Realm.getDefaultInstance();
+    realm.refresh();
 
     date_change.setOnClickListener(this);
 
@@ -157,6 +172,15 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     rv.setLayoutManager(layoutManager);
     rv.setAdapter(adapter);
 
+
+    String date = year+"-"+month+"-"+day;
+    daily_histories = realm.where(Daily_history.class).sort("date", Sort.DESCENDING).findAll();
+    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
+    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    todays_history.setLayoutManager(layoutManager1);
+    todays_history.setNestedScrollingEnabled(false);
+    todays_history.setAdapter(todays_history_rv_adapter);
+
     sp = new sharedPreference(getActivity());
 
     intake_level_home_frag.setText(intake + "\nml");
@@ -172,11 +196,9 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 //      waveloadingprogress();
     }
 
-    custom_water.setOnClickListener(new View.OnClickListener() {
+    floatingActionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-//        showRealmData();
-
 
         final Dialog d = new Dialog(getActivity());
         d.setTitle("NumberPicker");
@@ -222,20 +244,13 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     });
 
     new Boom(date_change);
-    new Boom(glass_water);
-    new Boom(bottle_water);
-    new Boom(custom_water);
 
-    Calendar c = Calendar.getInstance();
-    year = c.get(Calendar.YEAR);
-    month = c.get(Calendar.MONTH);
-    day = c.get(Calendar.DAY_OF_MONTH);
+
 
     full_date.setText(day + "/" + month + "/" + year);
 
     return root;
   }
-
 
 
   public void waveloadingprogress(Context ctx){
@@ -261,13 +276,11 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     int percent = (results * 100) / intake;
 
-    Toast.makeText(ctx, String.valueOf(percent), Toast.LENGTH_SHORT).show();
-
-//    waveLoadingView = root.findViewById(R.id.waveLoadingView);
-
+    waveLoadingView = WaveVariable.getWaveLoadingView();
     waveLoadingView.setCenterTitle(percent+" %");
     waveLoadingView.refreshDrawableState();
     if (percent >= 100){
+      waveLoadingView.refreshDrawableState();
       waveLoadingView.setProgressValue(100);
     }else{
       waveLoadingView.setProgressValue(percent);

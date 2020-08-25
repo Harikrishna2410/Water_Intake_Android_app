@@ -49,4 +49,7 @@ dependencies {
     implementation 'me.itangqi.waveloadingview:library:0.3.5'
     implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.2'
     implementation 'io.realm:android-adapters:2.1.1'
+
+//    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.umairayub79:MaDialog:1.3'
 }

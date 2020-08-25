@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
@@ -27,6 +28,7 @@ import java.util.Calendar;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<Custom_intakes_recycler_view_adapter.MyViewHolder> {
@@ -95,9 +97,9 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       @Override
       public void onClick(View view) {
         insertData(Integer.parseInt(holder.tv.getText().toString()));
+        notifyDataSetChanged();
         home_fregment hf = new home_fregment();
         hf.waveloadingprogress(context);
-
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();
       }
     });

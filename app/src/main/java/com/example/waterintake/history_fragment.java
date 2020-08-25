@@ -1,5 +1,6 @@
 package com.example.waterintake;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,12 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link history_fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class history_fragment extends Fragment {
+    ViewGroup root;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +64,9 @@ public class history_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history_fragment, container, false);
+//        return inflater.inflate(R.layout.fragment_history_fragment, container, false);
+        root = (ViewGroup) inflater.inflate(R.layout.fragment_history_fragment, container, false);
+
+        return root;
     }
 }
