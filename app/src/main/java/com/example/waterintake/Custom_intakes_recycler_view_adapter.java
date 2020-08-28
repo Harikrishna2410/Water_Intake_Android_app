@@ -3,6 +3,7 @@ package com.example.waterintake;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,14 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import me.itangqi.waveloadingview.WaveLoadingView;
+import umairayub.madialog.MaDialog;
+import umairayub.madialog.MaDialogListener;
 
 public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<Custom_intakes_recycler_view_adapter.MyViewHolder> {
 
@@ -40,6 +44,7 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
   FragmentActivity fragmentActivity;
   Realm realm;
   sharedPreference sp;
+  home_fregment hf;
   Fragment frag = null;
 
   //  public Custom_intakes_recycler_view_adapter(ImageView icon, TextView tv, ConstraintLayout card) {
@@ -74,6 +79,7 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
   public void onBindViewHolder(@NonNull Custom_intakes_recycler_view_adapter.MyViewHolder holder, int position) {
 
     Custom_water_intake c = list.get(position);
+    sp = new sharedPreference(fragmentActivity);
 
 //    Toast.makeText(fragmentActivity, c.getCustom_intake(), Toast.LENGTH_SHORT).show();
 
@@ -87,23 +93,38 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       holder.icon.setImageResource(R.drawable.small_waterbottle_1);
     } else if (a > 500 && a <= 750) {
       holder.icon.setImageResource(R.drawable.water_bottle);
-    } else if (a > 750 ) {
+    } else if (a > 750) {
       holder.icon.setImageResource(R.drawable.gig_water_jug);
     } else {
       holder.icon.setImageResource(R.drawable.water_bottle);
     }
 
+
+
     holder.card.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        insertData(Integer.parseInt(holder.tv.getText().toString()));
-        notifyDataSetChanged();
-        home_fregment hf = new home_fregment();
-        hf.waveloadingprogress(context);
+
+        if (home_fregment.percent >= 100) {
+          new MaDialog.Builder(fragmentActivity)
+            .setTitle("Enough!")
+            .setMessage("As per today's Intake you drank good amount of water ")
+            .setCancelableOnOutsideTouch(true)
+            .build();
+        } else {
+          insertData(Integer.parseInt(holder.tv.getText().toString()));
+          notifyDataSetChanged();
+          hf = new home_fregment();
+          hf.waveloadingprogress(context);
+
+        }
+
+        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
+
+
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();
       }
     });
-
 
 
 //    holder.icon.setImageResource(img[position]);
@@ -114,7 +135,8 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
 
 
     long date = Calendar.getInstance().getTimeInMillis();
-    SimpleDateFormat dateee = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss.SSS");
 
 //        Toast.makeText(getActivity(), String.valueOf(total), Toast.LENGTH_SHORT).show();
     Number current_id = realm.where(Daily_history.class).max("id");
@@ -126,15 +148,15 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       nextId = current_id.intValue() + 1;
     }
 
-    String StringDate = dateee.format(date);
+    String spdate = sp.client_pref.getString("date", null);
+
+    String StringDate = sdf.format(date);
+    String StringTime = sdf1.format(date);
 
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId, StringDate, glass_w);
+    Daily_history d = new Daily_history(nextId, spdate, StringTime, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
-
-//    home_fregment h = new home_fregment();
-//    h.waveloadingprogress(fragmentActivity);
 
     Toast.makeText(fragmentActivity, "Data Inserted", Toast.LENGTH_SHORT).show();
 
@@ -149,6 +171,7 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     ImageView icon;
     TextView tv;
     ConstraintLayout card;
+
     public MyViewHolder(@NonNull View itemView) {
       super(itemView);
       icon = itemView.findViewById(R.id.custom_intake_icon);

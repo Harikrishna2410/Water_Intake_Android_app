@@ -46,6 +46,8 @@ public class Screen_3 extends AppCompatActivity {
     controlBinding();
     sp = new sharedPreference(Screen_3.this);
 
+    sp.editor_client_pref.putString("date",null);
+    sp.editor_client_pref.commit();
     final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
     Realm.setDefaultConfiguration(configuration);
     Realm.getInstance(configuration);

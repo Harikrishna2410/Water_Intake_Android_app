@@ -1,5 +1,6 @@
 package com.example.waterintake;
 import me.itangqi.waveloadingview.WaveLoadingView;
+
 public class WaveVariable {
   private static WaveLoadingView waveLoadingView;
 

@@ -16,6 +16,7 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url "https://dl.bintray.com/shabankamel/android" }
         mavenCentral()
         maven {
             url "https://jitpack.io"

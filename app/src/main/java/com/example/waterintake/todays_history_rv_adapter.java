@@ -1,6 +1,7 @@
 package com.example.waterintake;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.example.waterintake.realm_db.Daily_history;
 
 //import cn.pedant.SweetAlert.SweetAlertDialog;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -52,18 +54,26 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
     return new myViewHolder(view);
   }
 
+
+
   @Override
   public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
     Daily_history daily_history = list.get(position);
 
-    String d = daily_history.getDate();
-
-    String[] cj = d.split(" ");
-
-    holder.tv_time.setText(String.valueOf(cj[1]));
     holder.tv_ml.setText(daily_history.getWater_intake_level()+"\nml");
     realm = Realm.getDefaultInstance();
+
+    try {
+      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+      Date time = sdf.parse(daily_history.getTime());
+//      Log.d("time",new SimpleDateFormat("K:mm:ss a").format(time));
+      holder.tv_time.setText(new SimpleDateFormat("K:mm:ss a").format(time));
+
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
 
     new Boom(holder.delete_btn);
 

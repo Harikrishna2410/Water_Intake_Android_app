@@ -8,19 +8,29 @@ public class Daily_history extends RealmObject {
   @PrimaryKey
   private int id ;
   private String date;
+  private String time;
   private int water_intake_level;
 
   public Daily_history() {
   }
 
-  public Daily_history(int id, String date, int water_intake_level) {
+  public Daily_history(int id, String date, String time, int water_intake_level) {
     this.id = id;
     this.date = date;
     this.water_intake_level = water_intake_level;
+    this.time = time;
   }
 
   public int getId() {
     return id;
+  }
+
+  public String getTime() {
+    return time;
+  }
+
+  public void setTime(String time) {
+    this.time = time;
   }
 
   public void setId(int id) {

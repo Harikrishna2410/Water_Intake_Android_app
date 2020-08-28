@@ -13,7 +13,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    app:layout_constraintGuide_percent="0.90" />
+    app:layout_constraintGuide_percent="0.92" />
 
   <!-- TODO: Update blank fragment layout -->
 
@@ -142,26 +142,30 @@
 
       </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/todays_histroy"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:overScrollMode="never"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/curent_history" />
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/todays_histroy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:overScrollMode="never"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_custom_water_intake_btn" />
 
       <TextView
         android:id="@+id/curent_history"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current Histroy"
-        android:textSize="18sp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Daily Histroy"
         android:textAlignment="center"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/todays_histroy"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_intake"/>
+        app:layout_constraintTop_toBottomOf="@+id/custom_intake" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/custom_intake"
@@ -172,19 +176,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
+      <TextView
+        android:id="@+id/add_custom_water_intake_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/circular_rectangle_1"
+        android:elevation="2dp"
+        android:padding="5dp"
+        android:drawableLeft="@drawable/sharp_add_circle_outline_black_18dp"
+        android:text=" Custom Button"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/custom_intake" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/floatingActionButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="8dp"
-    android:clickable="true"
-    android:src="@drawable/plus"
-    app:layout_constraintBottom_toTopOf="@+id/guideline12"
-    app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

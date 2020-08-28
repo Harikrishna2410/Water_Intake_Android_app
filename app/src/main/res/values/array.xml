@@ -16,5 +16,12 @@
     <item>Cold</item>
   </string-array>
 
+  <array name="history_title">
+    <item>Today</item>
+    <item>Weekly</item>
+    <item>Monthly</item>
+    <item>Yearly</item>
+  </array>
+
 
 </resources>
