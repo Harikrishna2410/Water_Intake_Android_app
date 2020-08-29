@@ -1,18 +1,30 @@
 package com.example.waterintake;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.waterintake.History.Monthly_History_Framgment;
+import com.example.waterintake.History.Todays_History_Fragment;
+import com.example.waterintake.History.Weekly_History_Fragment;
+import com.example.waterintake.History.Yearly_History_Fragment;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import co.ceryle.radiorealbutton.RadioRealButton;
 import co.ceryle.radiorealbutton.RadioRealButtonGroup;
@@ -25,8 +37,10 @@ import co.ceryle.radiorealbutton.RadioRealButtonGroup;
 public class history_fragment extends Fragment {
   ViewGroup root;
   RadioRealButton today_btn, weekly_btn, monthly_btn, yearly_btn;
-  ViewStub include_layout;
-  RadioRealButtonGroup group;
+  FrameLayout include_layout;
+  TabLayout group;
+  public FragmentManager fragmentManager;
+  Fragment fragment;
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,35 +93,52 @@ public class history_fragment extends Fragment {
     monthly_btn = root.findViewById(R.id.monthly_btn);
     yearly_btn = root.findViewById(R.id.yearly_btn);
     include_layout = root.findViewById(R.id.include_layout);
-    group = root.findViewById(R.id.radioRealButtonGroup);
+    group = root.findViewById(R.id.tabLayout);
 
 
-    group.setOnClickedButtonListener(new RadioRealButtonGroup.OnClickedButtonListener() {
+    fragmentManager = getChildFragmentManager();
+    Todays_History_Fragment todays_history_fragment = new Todays_History_Fragment();
+    fragmentManager.beginTransaction()
+      .replace(R.id.include_layout, todays_history_fragment)
+      .commit();
+
+    group.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
       @Override
-      public void onClickedButton(RadioRealButton button, int position) {
-        Toast.makeText(getActivity(), "Clicked! Position: " + position, Toast.LENGTH_SHORT).show();
-        switch (position) {
+      public void onTabSelected(TabLayout.Tab tab) {
+        fragment = null;
+        switch (tab.getPosition()){
           case 0:
-            include_layout.setLayoutResource(R.layout.activity_screen_3);
-              View inflated = include_layout.inflate();
+            fragment = new Todays_History_Fragment();
             break;
           case 1:
-            include_layout.setLayoutResource(R.layout.activity_screen_2);
-              View inflated1 = include_layout.inflate();
+            fragment = new Weekly_History_Fragment();
             break;
           case 2:
-            include_layout.setLayoutResource(R.layout.activity_screen_1);
-              View inflated2 = include_layout.inflate();
+            fragment = new Monthly_History_Framgment();
             break;
           case 3:
-            include_layout.setLayoutResource(R.layout.activity_screen_4);
-              View inflated3 = include_layout.inflate();
+            fragment = new Yearly_History_Fragment();
             break;
         }
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.include_layout,fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+
+      }
+
+      @Override
+      public void onTabUnselected(TabLayout.Tab tab) {
+
+      }
+
+      @Override
+      public void onTabReselected(TabLayout.Tab tab) {
 
       }
     });
 
     return root;
   }
+
 }

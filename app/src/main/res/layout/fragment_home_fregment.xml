@@ -31,7 +31,7 @@
       android:layout_height="wrap_content">
 
       <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/date_change_home_frag"
+        android:id="@+id/date_change_weekly_history"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="16dp"
@@ -49,12 +49,12 @@
           android:layout_height="25dp"
           android:layout_marginTop="8dp"
           android:src="@drawable/calendar"
-          app:layout_constraintEnd_toEndOf="@+id/full_date"
+          app:layout_constraintEnd_toEndOf="@+id/tv_from_to_date"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-          android:id="@+id/full_date"
+          android:id="@+id/tv_from_to_date"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:ems="5"

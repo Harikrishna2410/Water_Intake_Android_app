@@ -24,6 +24,8 @@ import com.example.waterintake.realm_db.Daily_history;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,6 +48,9 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
   sharedPreference sp;
   home_fregment hf;
   Fragment frag = null;
+  private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+  private static final DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+
 
   //  public Custom_intakes_recycler_view_adapter(ImageView icon, TextView tv, ConstraintLayout card) {
 //    this.icon = icon;

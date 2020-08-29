@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.History.Todays_History_Fragment;
 import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;
 
@@ -34,13 +38,12 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
   RealmResults<Daily_history> list;
   Realm realm;
   Context ctx;
-//  SweetAlertDialog SAD;
 
   public todays_history_rv_adapter() {
 
   }
 
-  public todays_history_rv_adapter(RealmResults<Daily_history> list,FragmentActivity fragmentActivity) {
+  public todays_history_rv_adapter(RealmResults<Daily_history> list, FragmentActivity fragmentActivity) {
     this.fragmentActivity = fragmentActivity;
     this.list = list;
 
@@ -55,18 +58,17 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
   }
 
 
-
   @Override
   public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
     Daily_history daily_history = list.get(position);
 
-    holder.tv_ml.setText(daily_history.getWater_intake_level()+"\nml");
+    holder.tv_ml.setText(daily_history.getWater_intake_level() + "\nml");
     realm = Realm.getDefaultInstance();
 
     try {
       SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
-      Date time = sdf.parse(daily_history.getTime());
+      Date time = sdf.parse(String.valueOf(daily_history.getTime()));
 //      Log.d("time",new SimpleDateFormat("K:mm:ss a").format(time));
       holder.tv_time.setText(new SimpleDateFormat("K:mm:ss a").format(time));
 
@@ -99,14 +101,14 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
             @Override
             public void onClick() {
               realm.beginTransaction();
-              RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id",id).findAll();
+              RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id", id).findAll();
               results.deleteAllFromRealm();
               realm.commitTransaction();
               realm.refresh();
               notifyDataSetChanged();
-
               home_fregment hf = new home_fregment();
               hf.waveloadingprogress(ctx);
+              Todays_History_Fragment.MpChartDisplay();
 
             }
           })
@@ -125,7 +127,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
 
   public class myViewHolder extends RecyclerView.ViewHolder {
 
-    TextView tv_ml,tv_time;
+    TextView tv_ml, tv_time;
     ImageView delete_btn;
 
     public myViewHolder(@NonNull View itemView) {

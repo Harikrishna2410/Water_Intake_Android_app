@@ -10,86 +10,43 @@
 
   <!-- TODO: Update blank fragment layout -->
 
-  <ViewStub
-    android:id="@+id/include_layout"
-    android:inflatedId="@+id/message_layout"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    app:layout_constraintBottom_toTopOf="@+id/guideline14"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/radioRealButtonGroup" />
-
-  <co.ceryle.radiorealbutton.RadioRealButtonGroup
-    android:id="@+id/radioRealButtonGroup"
+  <com.google.android.material.tabs.TabLayout
+    android:id="@+id/tabLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_height="40dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/circular_rectangle_1"
     android:elevation="2dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:rrbg_animateDrawables_enter="overshoot"
-    app:rrbg_animateSelector="accelerateDecelerate"
-    app:rrbg_animateTexts_enter="overshoot"
-    app:rrbg_dividerColor="#353535"
-    app:rrbg_dividerSize="1dp"
-    app:rrbg_radius="5dp"
-    app:rrbg_selectorColor="@color/colorPrimary"
-    app:rrbg_selectorSize="2dp">
+    app:layout_constraintTop_toTopOf="parent">
 
-    <co.ceryle.radiorealbutton.RadioRealButton
+    <com.google.android.material.tabs.TabItem
       android:id="@+id/today_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:rrb_checked="true"
-      app:rrb_drawableHeight="36dp"
-      app:rrb_drawablePadding="8dp"
-      app:rrb_drawableWidth="36dp"
-      app:rrb_ripple="true"
-      app:rrb_rippleColor="@color/colorPrimary"
-      app:rrb_text="Today"
-      app:rrb_textColor="@color/black" />
+      android:text="Today" />
 
-    <co.ceryle.radiorealbutton.RadioRealButton
+    <com.google.android.material.tabs.TabItem
       android:id="@+id/weekly_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:rrb_drawableHeight="36dp"
-      app:rrb_drawablePadding="8dp"
-      app:rrb_drawableWidth="36dp"
-      app:rrb_ripple="true"
-      app:rrb_rippleColor="@color/colorPrimary"
-      app:rrb_text="Weekly"
-      app:rrb_textColor="@color/black" />
+      android:text="Weekly" />
 
-    <co.ceryle.radiorealbutton.RadioRealButton
+    <com.google.android.material.tabs.TabItem
       android:id="@+id/monthly_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:rrb_drawableHeight="36dp"
-      app:rrb_drawablePadding="8dp"
-      app:rrb_drawableWidth="36dp"
-      app:rrb_ripple="true"
-      app:rrb_rippleColor="@color/colorPrimary"
-      app:rrb_text="Monthly"
-      app:rrb_textColor="@color/black" />
+      android:text="Monthly" />
 
-    <co.ceryle.radiorealbutton.RadioRealButton
+    <com.google.android.material.tabs.TabItem
       android:id="@+id/yearly_btn"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:rrb_drawableHeight="36dp"
-      app:rrb_drawablePadding="8dp"
-      app:rrb_drawableWidth="36dp"
-      app:rrb_ripple="true"
-      app:rrb_rippleColor="@color/colorPrimary"
-      app:rrb_text="Yearly"
-      app:rrb_textColor="@color/black" />
-
-  </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+      android:text="Yearly" />
+  </com.google.android.material.tabs.TabLayout>
 
 
   <androidx.constraintlayout.widget.Guideline
@@ -98,5 +55,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     app:layout_constraintGuide_percent=".92" />
+
+  <FrameLayout
+    android:id="@+id/include_layout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_marginTop="8dp"
+    android:orientation="horizontal"
+    app:layout_constraintBottom_toTopOf="@+id/guideline14"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tabLayout"></FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

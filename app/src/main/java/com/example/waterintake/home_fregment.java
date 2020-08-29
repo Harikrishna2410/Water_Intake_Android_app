@@ -11,7 +11,6 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.res.TypedArrayUtils;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,14 +34,14 @@ import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.realm_db.Users;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.reflect.Array;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -61,8 +60,8 @@ import umairayub.madialog.MaDialog;
 public class home_fregment extends Fragment implements View.OnClickListener {
 
   ImageView back_press;
-  TextView intake_level_home_frag,add_custom_water_intake_btn;
-  static TextView full_date,tv_current_history;
+  TextView intake_level_home_frag, add_custom_water_intake_btn;
+  static TextView full_date, tv_current_history;
   ConstraintLayout date_change, glass_water, bottle_water;
   WaveLoadingView waveLoadingView;
   int year, month, day;
@@ -83,6 +82,8 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   RealmResults<Daily_history> daily_histories;
   static String spdate;
   static int percent;
+  private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
   private static final String ARG_PARAM1 = "param1";
@@ -135,11 +136,11 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     // Inflate the layout for this fragment
     root = (ViewGroup) inflater.inflate(R.layout.fragment_home_fregment, container, false);
-    date_change = root.findViewById(R.id.date_change_home_frag);
+    date_change = root.findViewById(R.id.date_change_weekly_history);
     glass_water = root.findViewById(R.id.card_glass_water_drink_rv);
     waveLoadingView = root.findViewById(R.id.waveLoadingView);
     WaveVariable.setWaveLoadingView(waveLoadingView);
-    full_date = root.findViewById(R.id.full_date);
+    full_date = root.findViewById(R.id.tv_from_to_date);
     intake_level_home_frag = root.findViewById(R.id.intake_level_home_frag);
     todays_history = root.findViewById(R.id.todays_histroy);
     tv_current_history = root.findViewById(R.id.curent_history);
@@ -151,12 +152,13 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     year = c.get(Calendar.YEAR);
     month = c.get(Calendar.MONTH);
     day = c.get(Calendar.DAY_OF_MONTH);
+    String finaldate = dateFormat.format(c.getTime());
     if (sp.client_pref.getString("date", null) != null) {
       full_date.setText(sp.client_pref.getString("date", null));
     } else {
-      sp.editor_client_pref.putString("date", day + "/" + month + "/" + year);
+      sp.editor_client_pref.putString(finaldate, null);
       sp.editor_client_pref.commit();
-      full_date.setText(sp.client_pref.getString("date", null));
+      full_date.setText(finaldate);
     }
 
     spdate = sp.client_pref.getString("date", null);
@@ -188,12 +190,17 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
     rv.setLayoutManager(layoutManager);
     rv.setAdapter(adapter);
-
+    Date ddd = null;
+    try {
+      ddd = dateFormat.parse(spdate);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
     String date = year + "-" + month + "-" + day;
     Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
     daily_histories = realm.where(Daily_history.class).equalTo("date", spdate).sort("time", Sort.DESCENDING).findAll();
-    
+
     todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
     RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
     todays_history.setLayoutManager(layoutManager1);
@@ -331,9 +338,16 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     String StringDate = sdf.format(date);
     String StringTime = sdf1.format(date);
+    Date d1 = null, d2 = null;
+    try {
+      d1 = dateFormat.parse(full_date.getText().toString());
+      d2 = dateFormat.parse(StringDate);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId, full_date.getText().toString(), StringTime, glass_w);
+    Daily_history d = new Daily_history(nextId,full_date.getText().toString(), StringTime, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 
@@ -356,7 +370,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     switch (view.getId()) {
 
-      case R.id.date_change_home_frag:
+      case R.id.date_change_weekly_history:
 
         DatePickerDialog dp = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
           @RequiresApi(api = Build.VERSION_CODES.O)
@@ -368,7 +382,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
             c.set(Calendar.MONTH, month);
             c.set(Calendar.DAY_OF_MONTH, day);
 //                        Toast.makeText(getActivity(), m, Toast.LENGTH_SHORT).show();
-            full_date.setText(day + "/" + month + "/" + year);
+            full_date.setText(dateFormat.format(c.getTime()));
 
             sp.editor_client_pref.putString("date", full_date.getText().toString());
             sp.editor_client_pref.commit();

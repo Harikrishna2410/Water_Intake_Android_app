@@ -20,6 +20,9 @@ import android.widget.Toast;
 import com.astritveliu.boom.Boom;
 import com.example.waterintake.realm_db.Users;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import io.realm.DynamicRealm;
@@ -37,6 +40,7 @@ public class Screen_3 extends AppCompatActivity {
   int Intakes;
   ImageView back_press;
   Realm realm;
+  private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 
   @Override
@@ -46,7 +50,9 @@ public class Screen_3 extends AppCompatActivity {
     controlBinding();
     sp = new sharedPreference(Screen_3.this);
 
-    sp.editor_client_pref.putString("date",null);
+    Calendar c = Calendar.getInstance();
+
+    sp.editor_client_pref.putString("date",dateFormat.format(c.getTime()));
     sp.editor_client_pref.commit();
     final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
     Realm.setDefaultConfiguration(configuration);
