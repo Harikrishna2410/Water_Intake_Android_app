@@ -200,19 +200,19 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     String date = year + "-" + month + "-" + day;
     Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
-    daily_histories = realm.where(Daily_history.class).equalTo("date", ddd).sort("time", Sort.DESCENDING).findAll();
-
-    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
-    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-    todays_history.setLayoutManager(layoutManager1);
-    todays_history.setNestedScrollingEnabled(false);
-    todays_history.setAdapter(todays_history_rv_adapter);
+//    daily_histories = realm.where(Daily_history.class).equalTo("date", ddd).sort("time", Sort.DESCENDING).findAll();
+//
+//    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
+//    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//    todays_history.setLayoutManager(layoutManager1);
+//    todays_history.setNestedScrollingEnabled(false);
+//    todays_history.setAdapter(todays_history_rv_adapter);
 
     sp = new sharedPreference(getActivity());
 
     intake_level_home_frag.setText(intake + "\nml");
 
-    waveloadingprogress(getActivity());
+//    waveloadingprogress(getActivity());
 
     add_custom_water_intake_btn.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -277,12 +277,16 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     new Boom(date_change);
     new Boom(add_custom_water_intake_btn);
 
-
+    showRealmData();
     return root;
   }
 
 
   public void waveloadingprogress(Context ctx) {
+
+    Calendar date = Calendar.getInstance();
+
+    SimpleDateFormat dateee = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
     Realm.setDefaultConfiguration(configuration);
@@ -297,8 +301,9 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     for (int i = 0; i < query.size(); i++) {
       intake = query.get(i).getGoal();
     }
+    Date d = new Date(date.getTimeInMillis());
 
-    RealmQuery<Daily_history> usersquery = realm.where(Daily_history.class).equalTo("date", ddd);
+    RealmQuery<Daily_history> usersquery = realm.where(Daily_history.class).equalTo("date", d);
     int results = usersquery.sum("water_intake_level").intValue();
 
     percent = (results * 100) / intake;
@@ -341,14 +346,17 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     String StringTime = sdf1.format(date);
     Date d1 = null, d2 = null;
     try {
-      d1 = dateFormat.parse(full_date.getText().toString());
+      d1 = dateee.parse(String.valueOf(date));
       d2 = dateFormat.parse(StringTime);
     } catch (ParseException e) {
       e.printStackTrace();
+      Log.e("LogError", e.getMessage());
     }
 
+    Toast.makeText(getActivity(), d1.toString() + " / " + d2.toString(), Toast.LENGTH_SHORT).show();
+
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId,d1, d2, glass_w);
+    Daily_history d = new Daily_history(nextId, d1, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 
@@ -356,11 +364,18 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
   }
 
+  Date ddddd = null;
 
   private void showRealmData() {
-    List<Daily_history> dailyGoals = realm.where(Daily_history.class).equalTo("date", spdate).findAll();
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    List<Daily_history> dailyGoals = realm.where(Daily_history.class).findAll();
     for (int i = 0; i < dailyGoals.size(); i++) {
-      Log.d("result", "id :- " + dailyGoals.get(i).getId() + " Date :- " + dailyGoals.get(i).getDate());
+      try {
+        ddddd = df.parse(String.valueOf(dailyGoals.get(i).getDatetime()));
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      Log.d("result", "id :- " + dailyGoals.get(i).getId() + " Date :- " + ddddd);
 
 //      Toast.makeText(getActivity(), "ID: " + dailyGoals.get(i).getId() + "\nDate: " + dailyGoals.get(i).getDate() +"\nTime"+ dailyGoals.get(i).getTime() + "\nintake: " + dailyGoals.get(i).getWater_intake_level(), Toast.LENGTH_SHORT).show();
     }

@@ -120,11 +120,11 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
           insertData(Integer.parseInt(holder.tv.getText().toString()));
           notifyDataSetChanged();
           hf = new home_fregment();
-          hf.waveloadingprogress(context);
+//          hf.waveloadingprogress(context);
 
         }
 
-        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
+//        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
 
 
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -142,6 +142,8 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     long date = Calendar.getInstance().getTimeInMillis();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
     SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss.SSS");
+    SimpleDateFormat dateee = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 
 //        Toast.makeText(getActivity(), String.valueOf(total), Toast.LENGTH_SHORT).show();
     Number current_id = realm.where(Daily_history.class).max("id");
@@ -156,19 +158,24 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     String spdate = sp.client_pref.getString("date", null);
     Date StringDate = null;
     try {
-      StringDate = sdf.parse(spdate);
+      StringDate = dateee.parse(String.valueOf(date));
     } catch (ParseException e) {
       e.printStackTrace();
     }
     Date StringTime = null;
     try {
-      StringTime = sdf1.parse(String.valueOf(date));
+      StringTime = sdf1.parse(String.valueOf(sdf1.format(date)));
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
+    Calendar c = Calendar.getInstance();
+    Date fdate = new Date(c.getTimeInMillis());
+
+    Log.e("TimeDate", "\n"+String.valueOf(fdate));
+
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId, StringDate, StringTime, glass_w);
+    Daily_history d = new Daily_history(nextId,fdate , glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 

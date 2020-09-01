@@ -9,17 +9,15 @@ public class Daily_history extends RealmObject {
 
   @PrimaryKey
   private int id ;
-  private Date date;
-  private Date time;
+  private Date datetime;
   private int water_intake_level;
 
   public Daily_history() {
   }
 
-  public Daily_history(int id, Date date, Date time, int water_intake_level) {
+  public Daily_history(int id, Date datetime, int water_intake_level) {
     this.id = id;
-    this.date = date;
-    this.time = time;
+    this.datetime = datetime;
     this.water_intake_level = water_intake_level;
   }
 
@@ -31,20 +29,12 @@ public class Daily_history extends RealmObject {
     this.id = id;
   }
 
-  public Date getDate() {
-    return date;
+  public Date getDatetime() {
+    return datetime;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public Date getTime() {
-    return time;
-  }
-
-  public void setTime(Date time) {
-    this.time = time;
+  public void setDatetime(Date datetime) {
+    this.datetime = datetime;
   }
 
   public int getWater_intake_level() {

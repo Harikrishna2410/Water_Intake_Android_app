@@ -191,7 +191,7 @@ public class Weekly_History_Fragment extends Fragment {
         for (int i = 0; i< Weekly_histories.size();i++){
 
 
-            Toast.makeText(getActivity(), Weekly_histories.get(i).getDate().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), Weekly_histories.get(i).getDatetime().toString(), Toast.LENGTH_SHORT).show();
             
 //            Log.d("datas", "\nUnformated :- "+dateFormat.format(currentdate)+"\nformated :- "+d1+d2);
         }

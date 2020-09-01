@@ -66,15 +66,15 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
     holder.tv_ml.setText(daily_history.getWater_intake_level() + "\nml");
     realm = Realm.getDefaultInstance();
 
-    try {
-      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
-      Date time = sdf.parse(String.valueOf(daily_history.getTime()));
-//      Log.d("time",new SimpleDateFormat("K:mm:ss a").format(time));
-      holder.tv_time.setText(new SimpleDateFormat("K:mm:ss a").format(time));
-
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+////      Date time = sdf.parse(String.valueOf(daily_history.getTime()));
+////      Log.d("time",new SimpleDateFormat("K:mm:ss a").format(time));
+////      holder.tv_time.setText(new SimpleDateFormat("K:mm:ss a").format(time));
+////
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
 
 
     new Boom(holder.delete_btn);
