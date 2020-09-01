@@ -7,14 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +20,6 @@ import android.widget.Toast;
 
 import com.astritveliu.boom.Boom;
 import com.example.waterintake.R;
-import com.example.waterintake.home_fregment;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.todays_history_rv_adapter;
 import com.github.mikephil.charting.charts.BarChart;
@@ -33,18 +28,14 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import io.realm.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,7 +114,7 @@ public class Weekly_History_Fragment extends Fragment {
         // Inflate the layout for this fragment
         root = (ViewGroup) inflater.inflate(R.layout.fragment_weekly__history_, container, false);
         btn_change_date = root.findViewById(R.id.date_change_weekly_history);
-        tv_date = root.findViewById(R.id.tv_from_to_date);
+        tv_date = root.findViewById(R.id.tv_intake_total_in_ml);
         recyclerView = root.findViewById(R.id.rv_weekly_history);
         weekly_barChart = root.findViewById(R.id.weekly_barChart);
         realm = Realm.getDefaultInstance();

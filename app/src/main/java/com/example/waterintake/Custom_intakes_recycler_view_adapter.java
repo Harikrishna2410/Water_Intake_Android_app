@@ -27,6 +27,7 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -43,6 +44,8 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
   int ml;
   Context context;
   RealmResults<Custom_water_intake> list;
+  ArrayList<CustomWaterIntake_Pojo> customWaterIntake_pojo;
+
   FragmentActivity fragmentActivity;
   Realm realm;
   sharedPreference sp;
@@ -59,10 +62,11 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
 //  }
 
 
-  public Custom_intakes_recycler_view_adapter(RealmResults<Custom_water_intake> list, FragmentActivity fragmentActivity) {
+  public Custom_intakes_recycler_view_adapter(ArrayList<CustomWaterIntake_Pojo> customWaterIntake_pojo, FragmentActivity fragmentActivity) {
     this.list = list;
     this.fragmentActivity = fragmentActivity;
     realm = Realm.getDefaultInstance();
+    this.customWaterIntake_pojo = customWaterIntake_pojo;
   }
 
   public Custom_intakes_recycler_view_adapter(Context context, int id[], int ml, int img[]) {
@@ -83,14 +87,14 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
   @Override
   public void onBindViewHolder(@NonNull Custom_intakes_recycler_view_adapter.MyViewHolder holder, int position) {
 
-    Custom_water_intake c = list.get(position);
+//    Custom_water_intake c = list.get(position);
     sp = new sharedPreference(fragmentActivity);
 
 //    Toast.makeText(fragmentActivity, c.getCustom_intake(), Toast.LENGTH_SHORT).show();
 
-    holder.tv.setText(String.valueOf(c.getCustom_intake()));
+    holder.tv.setText(String.valueOf(customWaterIntake_pojo.get(position).getCustom_intake()));
 
-    int a = c.getCustom_intake();
+    int a = customWaterIntake_pojo.get(position).getCustom_intake();
 
     if (a <= 250) {
       holder.icon.setImageResource(R.drawable.drink);
@@ -98,10 +102,11 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       holder.icon.setImageResource(R.drawable.small_waterbottle_1);
     } else if (a > 500 && a <= 750) {
       holder.icon.setImageResource(R.drawable.water_bottle);
-    } else if (a > 750) {
+    } else if (a > 750 && a < 20000) {
       holder.icon.setImageResource(R.drawable.gig_water_jug);
-    } else {
-      holder.icon.setImageResource(R.drawable.water_bottle);
+    } else if (a == 20000){
+      holder.icon.setImageResource(R.drawable.plus);
+      holder.tv.setText("Add new");
     }
 
 
@@ -110,21 +115,26 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       @Override
       public void onClick(View view) {
 
-        if (home_fregment.percent >= 100) {
+        if (home_fregment.percent >= 100 ) {
           new MaDialog.Builder(fragmentActivity)
             .setTitle("Enough!")
             .setMessage("As per today's Intake you drank good amount of water ")
             .setCancelableOnOutsideTouch(true)
             .build();
         } else {
-          insertData(Integer.parseInt(holder.tv.getText().toString()));
-          notifyDataSetChanged();
-          hf = new home_fregment();
-//          hf.waveloadingprogress(context);
+          if (holder.tv.getText().equals("Add new")){
 
+              home_fregment.getInstace().customIntakeAlert();
+
+          }else {
+            insertData(Integer.parseInt(holder.tv.getText().toString()));
+            notifyDataSetChanged();
+            hf = new home_fregment();
+            hf.waveloadingprogress(context);
+          }
         }
 
-//        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
+        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
 
 
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -185,7 +195,7 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
 
   @Override
   public int getItemCount() {
-    return list.size();
+    return customWaterIntake_pojo.size();
   }
 
   public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
       <TextView
-        android:id="@+id/tv_from_to_date"
+        android:id="@+id/tv_intake_total_in_ml"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"

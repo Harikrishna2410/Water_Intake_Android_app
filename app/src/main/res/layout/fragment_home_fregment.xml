@@ -38,35 +38,40 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/round_circle_screen_4"
         android:backgroundTint="@color/white"
-        android:elevation="5dp"
-        android:padding="5dp"
+        android:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-          android:id="@+id/imageView5"
-          android:layout_width="25dp"
-          android:layout_height="25dp"
-          android:layout_marginTop="8dp"
-          android:src="@drawable/calendar"
-          app:layout_constraintEnd_toEndOf="@+id/tv_from_to_date"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
-          android:id="@+id/tv_from_to_date"
+          android:id="@+id/tv_intake_total_in_ml"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:ems="5"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="16dp"
           android:fontFamily="@font/roboto"
           android:gravity="center"
-          android:text="24/8/20"
+          android:text="1650\nml"
           android:textColor="@color/black"
           android:textSize="12sp"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+          app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <TextView
+          android:id="@+id/textView13"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:fontFamily="@font/montserrat"
+          android:text="Current"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
       </androidx.constraintlayout.widget.ConstraintLayout>
 
       <TextView
@@ -98,12 +103,29 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
 
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="16dp"
           android:fontFamily="@font/roboto"
           android:gravity="center"
-          android:text="2.24L"
+          android:text="2224\nml"
           android:textColor="@color/black"
-          android:textSize="15dp"
+          android:textSize="12sp"
           app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <TextView
+          android:id="@+id/textView9"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:fontFamily="@font/montserrat"
+          android:text="Total"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="16sp"
+          android:textStyle="bold"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
