@@ -39,6 +39,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -82,8 +83,10 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   RealmResults<Daily_history> daily_histories;
   static String spdate;
   static int percent;
-  static Date ddd = null;
+  static Date Todays_date = null;
   private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+  List<Date> data ;
+  public static Calendar calendar;
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,6 +98,8 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   private String mParam2;
   private PersianDatePickerDialog persianDatePickerDialog = null;
   private Context context;
+
+  ArrayList today_history = new ArrayList();
 
   /**
    * Use this factory method to create a new instance of
@@ -193,20 +198,40 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     rv.setAdapter(adapter);
 
     try {
-      ddd = dateFormat.parse(spdate);
+      Todays_date = dateFormat.parse(spdate);
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
-    String date = year + "-" + month + "-" + day;
-    Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
-//    daily_histories = realm.where(Daily_history.class).equalTo("date", ddd).sort("time", Sort.DESCENDING).findAll();
-//
-//    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
-//    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-//    todays_history.setLayoutManager(layoutManager1);
-//    todays_history.setNestedScrollingEnabled(false);
-//    todays_history.setAdapter(todays_history_rv_adapter);
+//    String date = year + "-" + month + "-" + day;
+//    Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
+
+    Log.i("todaysDate",String.valueOf(c.getTime()));
+
+
+
+
+    daily_histories = realm.where(Daily_history.class).findAll();
+    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
+
+    for (int i = 0; i<daily_histories.size(); i++){
+
+      String date = dateformat.format(daily_histories.get(i).getDatetime());
+      String time = timeformat.format(daily_histories.get(i).getDatetime());
+      String currentdate = dateformat.format(c.getTime());
+      if (date.equals(currentdate)){
+        Log.d("trrrue", String.valueOf(daily_histories.get(i)));
+        today_history.add(daily_histories.get(i));
+      }
+    }
+
+
+    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
+    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    todays_history.setLayoutManager(layoutManager1);
+    todays_history.setNestedScrollingEnabled(false);
+    todays_history.setAdapter(todays_history_rv_adapter);
 
     sp = new sharedPreference(getActivity());
 
@@ -364,18 +389,22 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
   }
 
-  Date ddddd = null;
 
   private void showRealmData() {
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
     List<Daily_history> dailyGoals = realm.where(Daily_history.class).findAll();
+
     for (int i = 0; i < dailyGoals.size(); i++) {
-      try {
-        ddddd = df.parse(String.valueOf(dailyGoals.get(i).getDatetime()));
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-      Log.d("result", "id :- " + dailyGoals.get(i).getId() + " Date :- " + ddddd);
+
+      String date = dateformat.format(dailyGoals.get(i).getDatetime());
+      String time = timeformat.format(dailyGoals.get(i).getDatetime());
+      Log.d("date","date:- "+date+" Time -: "+time+" Intakes :- "+dailyGoals.get(i).getWater_intake_level());
+
+
+//      String formateddate = format.format(date);
+//      Log.d("result", "id :- " + dailyGoals.get(i).getId() + " Date :- " +  dailyGoals.get(i).getDatetime());
+//      data.add(dailyGoals.get(i).getDatetime());
 
 //      Toast.makeText(getActivity(), "ID: " + dailyGoals.get(i).getId() + "\nDate: " + dailyGoals.get(i).getDate() +"\nTime"+ dailyGoals.get(i).getTime() + "\nintake: " + dailyGoals.get(i).getWater_intake_level(), Toast.LENGTH_SHORT).show();
     }

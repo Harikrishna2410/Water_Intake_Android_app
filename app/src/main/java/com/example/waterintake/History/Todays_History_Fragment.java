@@ -107,13 +107,13 @@ public class Todays_History_Fragment extends Fragment{
     realm = Realm.getDefaultInstance();
     sp = new sharedPreference(getActivity());
 
-    spdate = sp.client_pref.getString("date", null);
-    daily_histories = realm.where(Daily_history.class).equalTo("date", spdate).sort("time", Sort.DESCENDING).findAll();
-    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
-    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-    recyclerView.setLayoutManager(layoutManager1);
-    recyclerView.setNestedScrollingEnabled(false);
-    recyclerView.setAdapter(todays_history_rv_adapter);
+//    spdate = sp.client_pref.getString("date", null);
+//    daily_histories = realm.where(Daily_history.class).equalTo("date", spdate).sort("time", Sort.DESCENDING).findAll();
+//    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
+//    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+//    recyclerView.setLayoutManager(layoutManager1);
+//    recyclerView.setNestedScrollingEnabled(false);
+//    recyclerView.setAdapter(todays_history_rv_adapter);
 
     MpChartDisplay();
 
