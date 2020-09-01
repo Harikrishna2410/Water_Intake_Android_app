@@ -82,6 +82,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
   RealmResults<Daily_history> daily_histories;
   static String spdate;
   static int percent;
+  static Date ddd = null;
   private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
   // TODO: Rename parameter arguments, choose names that match
@@ -190,7 +191,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
     rv.setLayoutManager(layoutManager);
     rv.setAdapter(adapter);
-    Date ddd = null;
+
     try {
       ddd = dateFormat.parse(spdate);
     } catch (ParseException e) {
@@ -199,7 +200,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
 
     String date = year + "-" + month + "-" + day;
     Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
-    daily_histories = realm.where(Daily_history.class).equalTo("date", spdate).sort("time", Sort.DESCENDING).findAll();
+    daily_histories = realm.where(Daily_history.class).equalTo("date", ddd).sort("time", Sort.DESCENDING).findAll();
 
     todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
     RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -297,7 +298,7 @@ public class home_fregment extends Fragment implements View.OnClickListener {
       intake = query.get(i).getGoal();
     }
 
-    RealmQuery<Daily_history> usersquery = realm.where(Daily_history.class).equalTo("date", spdate);
+    RealmQuery<Daily_history> usersquery = realm.where(Daily_history.class).equalTo("date", ddd);
     int results = usersquery.sum("water_intake_level").intValue();
 
     percent = (results * 100) / intake;
@@ -341,13 +342,13 @@ public class home_fregment extends Fragment implements View.OnClickListener {
     Date d1 = null, d2 = null;
     try {
       d1 = dateFormat.parse(full_date.getText().toString());
-      d2 = dateFormat.parse(StringDate);
+      d2 = dateFormat.parse(StringTime);
     } catch (ParseException e) {
       e.printStackTrace();
     }
 
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId,full_date.getText().toString(), StringTime, glass_w);
+    Daily_history d = new Daily_history(nextId,d1, d2, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 

@@ -1,5 +1,7 @@
 package com.example.waterintake.realm_db;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -7,42 +9,42 @@ public class Daily_history extends RealmObject {
 
   @PrimaryKey
   private int id ;
-  private String date;
-  private String time;
+  private Date date;
+  private Date time;
   private int water_intake_level;
 
   public Daily_history() {
   }
 
-  public Daily_history(int id, String date, String time, int water_intake_level) {
+  public Daily_history(int id, Date date, Date time, int water_intake_level) {
     this.id = id;
     this.date = date;
-    this.water_intake_level = water_intake_level;
     this.time = time;
+    this.water_intake_level = water_intake_level;
   }
 
   public int getId() {
     return id;
   }
 
-  public String getTime() {
-    return time;
-  }
-
-  public void setTime(String time) {
-    this.time = time;
-  }
-
   public void setId(int id) {
     this.id = id;
   }
 
-  public String getDate() {
+  public Date getDate() {
     return date;
   }
 
-  public void setDate(String date) {
+  public void setDate(Date date) {
     this.date = date;
+  }
+
+  public Date getTime() {
+    return time;
+  }
+
+  public void setTime(Date time) {
+    this.time = time;
   }
 
   public int getWater_intake_level() {
@@ -52,5 +54,4 @@ public class Daily_history extends RealmObject {
   public void setWater_intake_level(int water_intake_level) {
     this.water_intake_level = water_intake_level;
   }
-
 }

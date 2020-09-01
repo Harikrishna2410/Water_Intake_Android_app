@@ -154,12 +154,21 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     }
 
     String spdate = sp.client_pref.getString("date", null);
-
-    String StringDate = sdf.format(date);
-    String StringTime = sdf1.format(date);
+    Date StringDate = null;
+    try {
+      StringDate = sdf.parse(spdate);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    Date StringTime = null;
+    try {
+      StringTime = sdf1.parse(String.valueOf(date));
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
 
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId, spdate, StringTime, glass_w);
+    Daily_history d = new Daily_history(nextId, StringDate, StringTime, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 

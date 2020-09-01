@@ -187,14 +187,11 @@ public class Weekly_History_Fragment extends Fragment {
 //        recyclerView.setNestedScrollingEnabled(false);
 //        recyclerView.setAdapter(todays_history_rv_adapter);
 
-        float fd= 24/10/2020;
-
-        List<Daily_history> stringArrayList = new ArrayList<Daily_history>();
 
         for (int i = 0; i< Weekly_histories.size();i++){
 
 
-            Toast.makeText(getActivity(), Weekly_histories.get(i).getDate(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), Weekly_histories.get(i).getDate().toString(), Toast.LENGTH_SHORT).show();
             
 //            Log.d("datas", "\nUnformated :- "+dateFormat.format(currentdate)+"\nformated :- "+d1+d2);
         }
