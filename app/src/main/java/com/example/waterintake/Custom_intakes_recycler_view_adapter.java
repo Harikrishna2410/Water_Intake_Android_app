@@ -131,10 +131,12 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
             notifyDataSetChanged();
             hf = new home_fregment();
             hf.waveloadingprogress(context);
+            home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
+            realm.refresh();
+
           }
         }
 
-        home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
 
 
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();

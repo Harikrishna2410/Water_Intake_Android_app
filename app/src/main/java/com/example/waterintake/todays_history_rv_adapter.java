@@ -55,29 +55,8 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
 
   public todays_history_rv_adapter(ArrayList<DailyHistory> today_history, FragmentActivity fragmentActivity) {
     this.fragmentActivity = fragmentActivity;
-
-//    this.list.clear();
-//    this.list.add(String.valueOf(today_history));
     list = today_history;
 
-
-    //    for (int i= 0;i<today_history.size();i++) {
-//      String date = dateformat.format(today_history.get(i).equals("datetime"));
-//      String time = timeformat.format(today_history.get(i).equals("datetime"));
-//      String currentdate = dateformat.format(calendar.getTime());
-//
-//      String water_level = String.valueOf(today_history.get(i).equals("water_intake_level"));
-//
-////      int id = today_history.get(i).getId();
-//
-//      if (date.equals(currentdate)) {
-//
-//        Log.d("trueeeeee", time);
-////        holder.tv_ml.setText(water_level + "\nml");
-////        holder.tv_time.setText(time);
-//
-//      }
-//    }
   }
 
   @NonNull
@@ -92,18 +71,10 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
   @Override
   public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
-//    Daily_history daily_history = list.get(position);
-
-    Log.d("values", list.get(position).toString());
-
-
-    Log.d("tottal", String.valueOf(total));
-
     String time_in_PMAM = Constants.TIME_FORMAT.format(list.get(position).getDatetime());
 
     holder.tv_time.setText(time_in_PMAM);
     holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level())+"\nml");
-//
 
     realm = Realm.getDefaultInstance();
 
@@ -113,8 +84,8 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
       @Override
       public void onClick(View view) {
 
-//        int id = daily_history.getId();
-
+        int id = list.get(position).getId();
+        Log.e("dddddddd",String.valueOf(id));
 
         new MaDialog.Builder(fragmentActivity)
           .setTitle("Are You Sure?")
@@ -130,11 +101,12 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
           .setNegativeButtonListener(new MaDialogListener() {
             @Override
             public void onClick() {
-//              realm.beginTransaction();
-//              RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id", id).findAll();
-//              results.deleteAllFromRealm();
-//              realm.commitTransaction();
-//              realm.refresh();
+              realm.beginTransaction();
+              RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id",3).findAll();
+              results.deleteAllFromRealm();
+              realm.commitTransaction();
+              realm.refresh();
+              Log.e("delete data",results.toString());
               notifyDataSetChanged();
               home_fregment hf = new home_fregment();
               hf.waveloadingprogress(ctx);

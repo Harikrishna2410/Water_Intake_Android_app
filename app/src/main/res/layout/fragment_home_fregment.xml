@@ -173,7 +173,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_custom_water_intake_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/curent_history" />
 
       <TextView
         android:id="@+id/curent_history"
@@ -197,22 +197,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-      <TextView
-        android:id="@+id/add_custom_water_intake_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/circular_rectangle_1"
-        android:elevation="2dp"
-        android:padding="5dp"
-        android:drawableLeft="@drawable/sharp_add_circle_outline_black_18dp"
-        android:text=" Custom Button"
-        android:textColor="@color/black"
-        android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_intake" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.core.widget.NestedScrollView>

@@ -75,13 +75,13 @@ public class home_fregment extends Fragment {
   RealmResults<Users> query;
   FloatingActionButton floatingActionButton;
   RecyclerView todays_history;
-  static todays_history_rv_adapter todays_history_rv_adapter;
+  public static todays_history_rv_adapter todays_history_rv_adapter;
   RealmResults<Daily_history> daily_histories;
   static String spdate;
   static int percent;
   static Date Todays_date = null;
   private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-  List<Date> data ;
+  List<Date> data;
   public static Calendar calendar;
 
   // TODO: Rename parameter arguments, choose names that match
@@ -151,7 +151,6 @@ public class home_fregment extends Fragment {
     intake_level_home_frag = root.findViewById(R.id.intake_level_home_frag);
     todays_history = root.findViewById(R.id.todays_histroy);
     tv_current_history = root.findViewById(R.id.curent_history);
-    add_custom_water_intake_btn = root.findViewById(R.id.add_custom_water_intake_btn);
     tv_intake_total_in_ml = root.findViewById(R.id.tv_intake_total_in_ml);
     DecimalFormat df2 = new DecimalFormat("#.##");
 
@@ -187,7 +186,7 @@ public class home_fregment extends Fragment {
     ArrayList<CustomWaterIntake_Pojo> customWaterIntake_pojo = new ArrayList<>();
 
     RealmResults<Custom_water_intake> custom_water_intakes_query = realm.where(Custom_water_intake.class).findAll();
-    for (int i = 0;i<custom_water_intakes_query.size();i++){
+    for (int i = 0; i < custom_water_intakes_query.size(); i++) {
 
       CustomWaterIntake_Pojo pojo = new CustomWaterIntake_Pojo();
       pojo.setId(custom_water_intakes_query.get(i).getId());
@@ -213,87 +212,54 @@ public class home_fregment extends Fragment {
 //    String date = year + "-" + month + "-" + day;
 //    Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
 
-    Log.i("todaysDate",String.valueOf(calendar.getTime()));
-
-
+    Log.i("todaysDate", String.valueOf(calendar.getTime()));
 
 
     daily_histories = realm.where(Daily_history.class).findAll();
     Log.d("trrrue", String.valueOf(daily_histories));
 
-    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
-    SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
+//    if (daily_histories.size() == 0 ){
+//
+//    }else {
+    for (int i = 0; i < daily_histories.size(); i++) {
+      DailyHistory dailyHistory = new DailyHistory();
 
-    if (daily_histories.size() == 0 ){
-
-    }else {
-      for (int i = 0; i < daily_histories.size(); i++) {
-        DailyHistory dailyHistory = new DailyHistory();
-
-        String date = dateformat.format(daily_histories.get(i).getDatetime());
-        String time = timeformat.format(daily_histories.get(i).getDatetime());
-        String currentdate = dateformat.format(calendar.getTime());
-        if (date.equals(currentdate)) {
-          Log.d("trrrue", String.valueOf(daily_histories.get(i)));
-          dailyHistory.setId(daily_histories.get(i).getId());
-          dailyHistory.setDatetime(daily_histories.get(i).getDatetime());
-          dailyHistory.setWater_intake_level(daily_histories.get(i).getWater_intake_level());
-          today_history.add(dailyHistory);
-        }
+      String date = Constants.DATE_FORMAT.format(daily_histories.get(i).getDatetime());
+      String time = Constants.TIME_FORMAT.format(daily_histories.get(i).getDatetime());
+      String currentdate = Constants.DATE_FORMAT.format(calendar.getTime());
+      if (date.equals(currentdate)) {
+        Log.d("trrrue", String.valueOf(daily_histories.get(i)));
+        dailyHistory.setId(daily_histories.get(i).getId());
+        dailyHistory.setDatetime(daily_histories.get(i).getDatetime());
+        dailyHistory.setWater_intake_level(daily_histories.get(i).getWater_intake_level());
+        today_history.add(dailyHistory);
       }
-      if (today_history.size()>0){
+//      }
+//      if (today_history.size()>0){
 
-
-
-        todays_history_rv_adapter = new todays_history_rv_adapter(today_history, getActivity());
-        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        todays_history.setLayoutManager(layoutManager1);
-        todays_history.setNestedScrollingEnabled(false);
-        todays_history.setAdapter(todays_history_rv_adapter);
-
-
-        sp = new sharedPreference(getActivity());
-
-        intake_level_home_frag.setText(intake + "\nml");
-
-        waveloadingprogress(getActivity());
-      }else {
-        Log.e("Error:-","No Value Available");
-      }
+//      }else {
+//        Log.e("Error:-","No Value Available");
+//      }
 
     }
 
+    todays_history_rv_adapter = new todays_history_rv_adapter(today_history, getActivity());
+    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    todays_history.setLayoutManager(layoutManager1);
+    todays_history.setNestedScrollingEnabled(false);
+    todays_history.setAdapter(todays_history_rv_adapter);
 
+    sp = new sharedPreference(getActivity());
 
+    intake_level_home_frag.setText(intake + "\nml");
 
-
-
-    add_custom_water_intake_btn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-
-        if (home_fregment.percent >= 100) {
-          new MaDialog.Builder(getActivity())
-            .setTitle("Enough!")
-            .setMessage("As per today's Intake you drank good amount of water ")
-            .setCancelableOnOutsideTouch(true)
-            .build();
-        } else {
-
-          customIntakeAlert();
-
-        }
-
-      }
-    });
-
-    new Boom(add_custom_water_intake_btn);
+    waveloadingprogress(getActivity());
 
     showRealmData();
     return root;
   }
 
-  public void customIntakeAlert(){
+  public void customIntakeAlert() {
     final Dialog d = new Dialog(getActivity());
     d.setTitle("NumberPicker");
     d.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -366,23 +332,23 @@ public class home_fregment extends Fragment {
     SimpleDateFormat timeformat = new SimpleDateFormat("h:mm:sss a");
 
     int total = 0;
-    for (int i = 0; i<usersquery.size(); i++){
+    for (int i = 0; i < usersquery.size(); i++) {
       String str_date = dateformat.format(usersquery.get(i).getDatetime());
       String time = timeformat.format(usersquery.get(i).getDatetime());
       String currentdate = dateformat.format(calendar.getTime());
 
-      if (currentdate.equals(str_date)){
+      if (currentdate.equals(str_date)) {
 
         int temp = usersquery.get(i).getWater_intake_level();
-        Log.d("totall",String.valueOf(temp));
+        Log.d("totall", String.valueOf(temp));
 
         total = temp + total;
       }
-      Log.i("strdate",str_date+" | "+currentdate);
+      Log.i("strdate", str_date + " | " + currentdate);
     }
 
 
-    tv_intake_total_in_ml.setText(String.valueOf(total)+"\nml");
+    tv_intake_total_in_ml.setText(String.valueOf(total) + "\nml");
 
     percent = (total * 100) / intake;
     Log.d("percent", String.valueOf(percent));
@@ -452,7 +418,7 @@ public class home_fregment extends Fragment {
 
       String date = dateformat.format(dailyGoals.get(i).getDatetime());
       String time = timeformat.format(dailyGoals.get(i).getDatetime());
-      Log.d("date","date:- "+date+" Time -: "+time+" Intakes :- "+dailyGoals.get(i).getWater_intake_level());
+      Log.d("date", "date:- " + date + " Time -: " + time + " Intakes :- " + dailyGoals.get(i).getWater_intake_level());
 
 
 //      String formateddate = format.format(date);
