@@ -1,4 +1,4 @@
-package com.example.waterintake;
+package com.example.waterintake.Modal_Classis;
 
 public class CustomWaterIntake_Pojo {
   int id;

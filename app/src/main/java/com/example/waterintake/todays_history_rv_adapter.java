@@ -9,31 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
 import com.example.waterintake.History.Todays_History_Fragment;
-import com.example.waterintake.realm_db.Custom_water_intake;
+import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.realm_db.Daily_history;
 
 //import cn.pedant.SweetAlert.SweetAlertDialog;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import umairayub.madialog.MaDialog;
 import umairayub.madialog.MaDialogListener;
@@ -41,14 +29,10 @@ import umairayub.madialog.MaDialogListener;
 public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_history_rv_adapter.myViewHolder> {
 
   FragmentActivity fragmentActivity;
-  //RealmResults<Daily_history> list = new RealmResults<Daily_history>();
   Realm realm;
-  Context ctx;
-  Calendar calendar = Calendar.getInstance();
-  ;
-  int total = 0;
   ArrayList<DailyHistory> list = new ArrayList<>();
-
+  sharedPreference sp;
+  Context context;
   public todays_history_rv_adapter(FragmentActivity activity) {
 
   }
@@ -75,6 +59,15 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
 
     holder.tv_time.setText(time_in_PMAM);
     holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level())+"\nml");
+    holder.tv_id.setText(String.valueOf(list.get(position).getId()));
+    holder.tv_id.setVisibility(View.GONE);
+    sp = new sharedPreference(fragmentActivity);
+
+    if (sp.client_pref.getBoolean("deleteBtnVisible",false) == true){
+      holder.delete_btn.setVisibility(View.GONE);
+    }else {
+      holder.delete_btn.setVisibility(View.VISIBLE);
+    }
 
     realm = Realm.getDefaultInstance();
 
@@ -87,38 +80,42 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
         int id = list.get(position).getId();
         Log.e("dddddddd",String.valueOf(id));
 
-        new MaDialog.Builder(fragmentActivity)
-          .setTitle("Are You Sure?")
-          .setMessage("Won't be able to recover this data")
-          .setPositiveButtonText("Cancel")
-          .setNegativeButtonText("Yes,delete it!")
-          .setPositiveButtonListener(new MaDialogListener() {
-            @Override
-            public void onClick() {
-              new MaDialog.Builder(fragmentActivity).setCancelableOnOutsideTouch(true);
-            }
-          })
-          .setNegativeButtonListener(new MaDialogListener() {
-            @Override
-            public void onClick() {
-              realm.beginTransaction();
-              RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id",3).findAll();
-              results.deleteAllFromRealm();
-              realm.commitTransaction();
-              realm.refresh();
-              Log.e("delete data",results.toString());
-              notifyDataSetChanged();
-              home_fregment hf = new home_fregment();
-              hf.waveloadingprogress(ctx);
+        try {
+
+          new MaDialog.Builder(fragmentActivity)
+            .setTitle("Are You Sure?")
+            .setMessage("Won't be able to recover this data")
+            .setPositiveButtonText("Cancel")
+            .setNegativeButtonText("Yes,delete it!")
+            .setPositiveButtonListener(new MaDialogListener() {
+              @Override
+              public void onClick() {
+                new MaDialog.Builder(fragmentActivity).setCancelableOnOutsideTouch(true);
+              }
+            })
+            .setNegativeButtonListener(new MaDialogListener() {
+              @Override
+              public void onClick() {
+                realm.beginTransaction();
+                RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id",list.get(position).getId()).findAll();
+                results.deleteAllFromRealm();
+                realm.commitTransaction();
+                realm.refresh();
+                list.remove(position);
+                Log.e("delete data",results.toString());
+                notifyDataSetChanged();
+                home_fregment.getInstace().waveloadingprogress();
               Todays_History_Fragment.MpChartDisplay();
 
-            }
-          })
-          .build();
+              }
+            })
+            .build();
 
+        }catch (Exception e){
+          Log.e("Exception Error",e.getMessage());
+        }
       }
     });
-
   }
 
   @Override
@@ -133,7 +130,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
 
   public class myViewHolder extends RecyclerView.ViewHolder {
 
-    TextView tv_ml, tv_time;
+    TextView tv_ml, tv_time, tv_id;
     ImageView delete_btn;
 
     public myViewHolder(@NonNull View itemView) {
@@ -142,7 +139,8 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
       tv_ml = itemView.findViewById(R.id.tv_ml);
       tv_time = itemView.findViewById(R.id.tv_time);
       delete_btn = itemView.findViewById(R.id.delete_btn);
-
+      tv_id = itemView.findViewById(R.id.today_history_id);
     }
+
   }
 }

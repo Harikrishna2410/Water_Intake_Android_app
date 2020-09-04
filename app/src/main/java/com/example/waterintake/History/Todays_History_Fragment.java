@@ -1,21 +1,19 @@
 package com.example.waterintake.History;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.example.waterintake.Constants;
+import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.R;
 import com.example.waterintake.home_fregment;
 import com.example.waterintake.realm_db.Daily_history;
@@ -28,13 +26,11 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import io.realm.Sort;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +50,8 @@ public class Todays_History_Fragment extends Fragment{
   public static BarData barData;
   public static BarDataSet barDataSet;
   public static RealmQuery<Daily_history> usersquery;
+  ArrayList<DailyHistory> today_history = new ArrayList<>();
+  String Error = "Error in Todays History Fragment";
 
 
   // TODO: Rename parameter arguments, choose names that match
@@ -107,13 +105,39 @@ public class Todays_History_Fragment extends Fragment{
     realm = Realm.getDefaultInstance();
     sp = new sharedPreference(getActivity());
 
-//    spdate = sp.client_pref.getString("date", null);
-//    daily_histories = realm.where(Daily_history.class).equalTo("date", spdate).sort("time", Sort.DESCENDING).findAll();
-//    todays_history_rv_adapter = new todays_history_rv_adapter(daily_histories, getActivity());
-//    RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-//    recyclerView.setLayoutManager(layoutManager1);
-//    recyclerView.setNestedScrollingEnabled(false);
-//    recyclerView.setAdapter(todays_history_rv_adapter);
+    sp.editor_client_pref.putBoolean("deleteBtnVisible",true);
+    sp.editor_client_pref.commit();
+
+    try {
+
+      daily_histories = realm.where(Daily_history.class).findAll();
+      Log.d("trrrue", String.valueOf(daily_histories));
+
+      for (int i = 0; i < daily_histories.size(); i++) {
+        DailyHistory dailyHistory = new DailyHistory();
+
+        String date = Constants.DATE_FORMAT.format(daily_histories.get(i).getDatetime());
+        String time = Constants.TIME_FORMAT.format(daily_histories.get(i).getDatetime());
+        String currentdate = Constants.DATE_FORMAT.format(Constants.calender.getTime());
+        if (date.equals(currentdate)) {
+          Log.d("trrrue", String.valueOf(daily_histories.get(i)));
+          dailyHistory.setId(daily_histories.get(i).getId());
+          dailyHistory.setDatetime(daily_histories.get(i).getDatetime());
+          dailyHistory.setWater_intake_level(daily_histories.get(i).getWater_intake_level());
+          today_history.add(dailyHistory);
+        }
+      }
+
+      todays_history_rv_adapter = new todays_history_rv_adapter(today_history, getActivity());
+      RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+      recyclerView.setLayoutManager(layoutManager1);
+      recyclerView.setNestedScrollingEnabled(false);
+      recyclerView.setAdapter(todays_history_rv_adapter);
+
+
+    }catch (Exception e){
+      Log.e(Error,e.getMessage());
+    }
 
     MpChartDisplay();
 
@@ -122,10 +146,9 @@ public class Todays_History_Fragment extends Fragment{
 
 
 
-
   public static void MpChartDisplay(){
-    usersquery = realm.where(Daily_history.class).equalTo("date", spdate);
-    int results = usersquery.sum("water_intake_level").intValue();
+
+    int results = home_fregment.Today_intake_total;
     realm.setAutoRefresh(true);
 
     total = new ArrayList<>();

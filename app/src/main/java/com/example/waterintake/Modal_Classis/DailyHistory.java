@@ -1,4 +1,4 @@
-package com.example.waterintake;
+package com.example.waterintake.Modal_Classis;
 
 import java.util.Date;
 

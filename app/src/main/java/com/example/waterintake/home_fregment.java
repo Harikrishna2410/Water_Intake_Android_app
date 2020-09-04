@@ -19,16 +19,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.Modal_Classis.CustomWaterIntake_Pojo;
+import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.realm_db.Users;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -41,12 +41,9 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import ir.hamsaa.persiandatepicker.PersianDatePickerDialog;
 import me.itangqi.waveloadingview.WaveLoadingView;
-import umairayub.madialog.MaDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,25 +52,20 @@ import umairayub.madialog.MaDialog;
  */
 public class home_fregment extends Fragment {
 
-  ImageView back_press;
-  TextView intake_level_home_frag, add_custom_water_intake_btn;
+  TextView intake_level_home_frag;
   public static TextView tv_intake_total_in_ml;
-  static TextView full_date, tv_current_history;
-  ConstraintLayout date_change, glass_water, bottle_water;
+  static TextView tv_current_history;
+  ConstraintLayout glass_water, bottle_water;
   WaveLoadingView waveLoadingView;
   int year, month, day;
-  int glass_w, glass_b, total, intake;
+  int intake;
   public sharedPreference sp;
   Realm realm;
   Number current_id;
-  int custom_intake_id, custom_intakes;
-  ImageView custom_intake_icon;
-  String[] ml = {"250", "500", "750"};
   int img[] = {R.drawable.drink, R.drawable.water_bottle, R.drawable.small_waterbottle_1};
   int id[] = {1, 2, 3};
   ViewGroup root;
   RealmResults<Users> query;
-  FloatingActionButton floatingActionButton;
   RecyclerView todays_history;
   public static todays_history_rv_adapter todays_history_rv_adapter;
   RealmResults<Daily_history> daily_histories;
@@ -81,8 +73,7 @@ public class home_fregment extends Fragment {
   static int percent;
   static Date Todays_date = null;
   private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-  List<Date> data;
-  public static Calendar calendar;
+  int total = 0;
 
   // TODO: Rename parameter arguments, choose names that match
   // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -94,6 +85,9 @@ public class home_fregment extends Fragment {
   private String mParam2;
   private PersianDatePickerDialog persianDatePickerDialog = null;
   private Context context;
+
+  public static int Today_intake_total;
+
 
   ArrayList<DailyHistory> today_history = new ArrayList<>();
 
@@ -155,11 +149,10 @@ public class home_fregment extends Fragment {
     DecimalFormat df2 = new DecimalFormat("#.##");
 
 
-    calendar = Calendar.getInstance();
-    year = calendar.get(Calendar.YEAR);
-    month = calendar.get(Calendar.MONTH);
-    day = calendar.get(Calendar.DAY_OF_MONTH);
-    String finaldate = dateFormat.format(calendar.getTime());
+    year = Constants.calender.get(Calendar.YEAR);
+    month = Constants.calender.get(Calendar.MONTH);
+    day = Constants.calender.get(Calendar.DAY_OF_MONTH);
+//    String finaldate = Constants.DATE_FORMAT.format(calendar.getTime());
 
     spdate = sp.client_pref.getString("date", null);
 
@@ -183,25 +176,31 @@ public class home_fregment extends Fragment {
     RecyclerView rv = root.findViewById(R.id.custom_intake);
     rv.setHasFixedSize(true);
 
+    sp.editor_client_pref.putBoolean("deleteBtnVisible",false);
+    sp.editor_client_pref.commit();
+
+//  STARTS FIRST RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
+
+    //region
+
     ArrayList<CustomWaterIntake_Pojo> customWaterIntake_pojo = new ArrayList<>();
 
     RealmResults<Custom_water_intake> custom_water_intakes_query = realm.where(Custom_water_intake.class).findAll();
     for (int i = 0; i < custom_water_intakes_query.size(); i++) {
-
       CustomWaterIntake_Pojo pojo = new CustomWaterIntake_Pojo();
       pojo.setId(custom_water_intakes_query.get(i).getId());
       pojo.setCustom_intake(custom_water_intakes_query.get(i).getCustom_intake());
-
       customWaterIntake_pojo.add(pojo);
-
     }
-
     customWaterIntake_pojo.add(new CustomWaterIntake_Pojo(5000, 20000));
-
     Custom_intakes_recycler_view_adapter adapter = new Custom_intakes_recycler_view_adapter(customWaterIntake_pojo, getActivity());
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
     rv.setLayoutManager(layoutManager);
     rv.setAdapter(adapter);
+
+    //endregion
+
+//  ENDS FIRST RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
 
     try {
       Todays_date = dateFormat.parse(spdate);
@@ -209,24 +208,36 @@ public class home_fregment extends Fragment {
       e.printStackTrace();
     }
 
-//    String date = year + "-" + month + "-" + day;
-//    Toast.makeText(getActivity(), spdate, Toast.LENGTH_SHORT).show();
-
-    Log.i("todaysDate", String.valueOf(calendar.getTime()));
+    Log.i("todaysDate", String.valueOf(Constants.calender.getTime()));
 
 
+//  STARTS SECOND RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
+
+    getTodaysData();
+
+//  ENDS SECOND RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
+
+
+    sp = new sharedPreference(getActivity());
+
+    intake_level_home_frag.setText(intake + "\nml");
+
+    waveloadingprogress();
+
+//    showRealmData();
+    return root;
+  }
+
+  public void getTodaysData(){
     daily_histories = realm.where(Daily_history.class).findAll();
     Log.d("trrrue", String.valueOf(daily_histories));
 
-//    if (daily_histories.size() == 0 ){
-//
-//    }else {
     for (int i = 0; i < daily_histories.size(); i++) {
       DailyHistory dailyHistory = new DailyHistory();
 
       String date = Constants.DATE_FORMAT.format(daily_histories.get(i).getDatetime());
       String time = Constants.TIME_FORMAT.format(daily_histories.get(i).getDatetime());
-      String currentdate = Constants.DATE_FORMAT.format(calendar.getTime());
+      String currentdate = Constants.DATE_FORMAT.format(Constants.calender.getTime());
       if (date.equals(currentdate)) {
         Log.d("trrrue", String.valueOf(daily_histories.get(i)));
         dailyHistory.setId(daily_histories.get(i).getId());
@@ -234,13 +245,6 @@ public class home_fregment extends Fragment {
         dailyHistory.setWater_intake_level(daily_histories.get(i).getWater_intake_level());
         today_history.add(dailyHistory);
       }
-//      }
-//      if (today_history.size()>0){
-
-//      }else {
-//        Log.e("Error:-","No Value Available");
-//      }
-
     }
 
     todays_history_rv_adapter = new todays_history_rv_adapter(today_history, getActivity());
@@ -248,15 +252,6 @@ public class home_fregment extends Fragment {
     todays_history.setLayoutManager(layoutManager1);
     todays_history.setNestedScrollingEnabled(false);
     todays_history.setAdapter(todays_history_rv_adapter);
-
-    sp = new sharedPreference(getActivity());
-
-    intake_level_home_frag.setText(intake + "\nml");
-
-    waveloadingprogress(getActivity());
-
-    showRealmData();
-    return root;
   }
 
   public void customIntakeAlert() {
@@ -295,7 +290,7 @@ public class home_fregment extends Fragment {
         Custom_water_intake cs_intake = new Custom_water_intake(nextId, in);
         realm.copyToRealm(cs_intake);
         realm.commitTransaction();
-        waveloadingprogress(context);
+        waveloadingprogress();
         todays_history_rv_adapter.notifyDataSetChanged();
 
         d.dismiss();
@@ -305,17 +300,7 @@ public class home_fregment extends Fragment {
   }
 
 
-  public void waveloadingprogress(Context ctx) {
-
-    Calendar date = Calendar.getInstance();
-
-    SimpleDateFormat dateee = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-    final RealmConfiguration configuration = new RealmConfiguration.Builder().name("sample.realm").schemaVersion(1).build();
-    Realm.setDefaultConfiguration(configuration);
-    Realm.getInstance(configuration);
-
-    Realm.init(ctx);
+  public void waveloadingprogress() {
 
     realm = Realm.getDefaultInstance();
 
@@ -324,18 +309,12 @@ public class home_fregment extends Fragment {
     for (int i = 0; i < query.size(); i++) {
       intake = query.get(i).getGoal();
     }
-    Date d = new Date(date.getTimeInMillis());
 
     RealmResults<Daily_history> usersquery = realm.where(Daily_history.class).findAll();
 
-    SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
-    SimpleDateFormat timeformat = new SimpleDateFormat("h:mm:sss a");
-
-    int total = 0;
     for (int i = 0; i < usersquery.size(); i++) {
-      String str_date = dateformat.format(usersquery.get(i).getDatetime());
-      String time = timeformat.format(usersquery.get(i).getDatetime());
-      String currentdate = dateformat.format(calendar.getTime());
+      String str_date = Constants.DATE_FORMAT.format(usersquery.get(i).getDatetime());
+      String currentdate = Constants.DATE_FORMAT.format(Constants.calender.getTime());
 
       if (currentdate.equals(str_date)) {
 
@@ -344,9 +323,14 @@ public class home_fregment extends Fragment {
 
         total = temp + total;
       }
-      Log.i("strdate", str_date + " | " + currentdate);
+//      Log.i("strdate", str_date + " | " + currentdate);
     }
 
+    Today_intake_total = total;
+
+//    sp.editor_client_pref.putInt("Todays_Total_Intakes",total);
+//    sp.editor_client_pref.commit();
+//    Log.i("Total",String.valueOf(total));
 
     tv_intake_total_in_ml.setText(String.valueOf(total) + "\nml");
 
@@ -369,14 +353,6 @@ public class home_fregment extends Fragment {
 
   public void insertData(int glass_w) {
 
-
-    long date = Calendar.getInstance().getTimeInMillis();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-    SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm:ss.SSS");
-
-    SimpleDateFormat dateee = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
-//        Toast.makeText(getActivity(), String.valueOf(total), Toast.LENGTH_SHORT).show();
     current_id = realm.where(Daily_history.class).max("id");
 
     int nextId;
@@ -386,11 +362,10 @@ public class home_fregment extends Fragment {
       nextId = current_id.intValue() + 1;
     }
 
-    String StringDate = sdf.format(date);
-    String StringTime = sdf1.format(date);
+    String StringTime = Constants.TIME_FORMAT.format(Constants.calender.getTimeInMillis());
     Date d1 = null, d2 = null;
     try {
-      d1 = dateee.parse(String.valueOf(date));
+      d1 = Constants.FULL_DATE_FORMAT.parse(String.valueOf(Constants.calender.getTimeInMillis()));
       d2 = dateFormat.parse(StringTime);
     } catch (ParseException e) {
       e.printStackTrace();

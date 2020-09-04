@@ -1,8 +1,6 @@
 package com.example.waterintake;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.Modal_Classis.CustomWaterIntake_Pojo;
 import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,10 +29,7 @@ import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import io.realm.Sort;
-import me.itangqi.waveloadingview.WaveLoadingView;
 import umairayub.madialog.MaDialog;
-import umairayub.madialog.MaDialogListener;
 
 public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<Custom_intakes_recycler_view_adapter.MyViewHolder> {
 
@@ -104,39 +97,37 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
       holder.icon.setImageResource(R.drawable.water_bottle);
     } else if (a > 750 && a < 20000) {
       holder.icon.setImageResource(R.drawable.gig_water_jug);
-    } else if (a == 20000){
+    } else if (a == 20000) {
       holder.icon.setImageResource(R.drawable.plus);
       holder.tv.setText("Add new");
     }
-
 
 
     holder.card.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
 
-        if (home_fregment.percent >= 100 ) {
+        if (home_fregment.percent >= 100) {
           new MaDialog.Builder(fragmentActivity)
             .setTitle("Enough!")
             .setMessage("As per today's Intake you drank good amount of water ")
             .setCancelableOnOutsideTouch(true)
             .build();
         } else {
-          if (holder.tv.getText().equals("Add new")){
+          if (holder.tv.getText().equals("Add new")) {
 
-              home_fregment.getInstace().customIntakeAlert();
+            home_fregment.getInstace().customIntakeAlert();
 
-          }else {
+          } else {
             insertData(Integer.parseInt(holder.tv.getText().toString()));
             notifyDataSetChanged();
             hf = new home_fregment();
-            hf.waveloadingprogress(context);
+            hf.waveloadingprogress();
             home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
             realm.refresh();
 
           }
         }
-
 
 
 //        Toast.makeText(fragmentActivity, holder.tv.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -184,10 +175,10 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     Calendar c = Calendar.getInstance();
     Date fdate = new Date(c.getTimeInMillis());
 
-    Log.e("TimeDate", "\n"+String.valueOf(fdate));
+    Log.e("TimeDate", "\n" + String.valueOf(fdate));
 
     realm.beginTransaction();
-    Daily_history d = new Daily_history(nextId,fdate , glass_w);
+    Daily_history d = new Daily_history(nextId, fdate, glass_w);
     realm.copyToRealm(d);
     realm.commitTransaction();
 
