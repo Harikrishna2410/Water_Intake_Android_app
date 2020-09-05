@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
 import com.example.waterintake.History.Todays_History_Fragment;
+import com.example.waterintake.History.Weekly_History_Fragment;
 import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.realm_db.Daily_history;
 
@@ -33,6 +34,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
   ArrayList<DailyHistory> list = new ArrayList<>();
   sharedPreference sp;
   Context context;
+
   public todays_history_rv_adapter(FragmentActivity activity) {
 
   }
@@ -58,14 +60,14 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
     String time_in_PMAM = Constants.TIME_FORMAT.format(list.get(position).getDatetime());
 
     holder.tv_time.setText(time_in_PMAM);
-    holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level())+"\nml");
+    holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level()) + "\nml");
     holder.tv_id.setText(String.valueOf(list.get(position).getId()));
     holder.tv_id.setVisibility(View.GONE);
     sp = new sharedPreference(fragmentActivity);
 
-    if (sp.client_pref.getBoolean("deleteBtnVisible",false) == true){
+    if (sp.client_pref.getBoolean("deleteBtnVisible", false) == true) {
       holder.delete_btn.setVisibility(View.GONE);
-    }else {
+    } else {
       holder.delete_btn.setVisibility(View.VISIBLE);
     }
 
@@ -78,7 +80,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
       public void onClick(View view) {
 
         int id = list.get(position).getId();
-        Log.e("dddddddd",String.valueOf(id));
+        Log.e("dddddddd", String.valueOf(id));
 
         try {
 
@@ -97,22 +99,26 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
               @Override
               public void onClick() {
                 realm.beginTransaction();
-                RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id",list.get(position).getId()).findAll();
+                RealmResults<Daily_history> results = realm.where(Daily_history.class).equalTo("id", list.get(position).getId()).findAll();
                 results.deleteAllFromRealm();
                 realm.commitTransaction();
                 realm.refresh();
                 list.remove(position);
-                Log.e("delete data",results.toString());
+                Log.e("delete data", results.toString());
                 notifyDataSetChanged();
                 home_fregment.getInstace().waveloadingprogress();
-              Todays_History_Fragment.MpChartDisplay();
+                Todays_History_Fragment.MpChartDisplay();
+                if (sp.client_pref.getBoolean("deleteBtnVisible", false) == false) {
+                  Weekly_History_Fragment WHF = new Weekly_History_Fragment();
+                  WHF.MpChartDisplay();
+                }
 
               }
             })
             .build();
 
-        }catch (Exception e){
-          Log.e("Exception Error",e.getMessage());
+        } catch (Exception e) {
+          Log.e("Exception Error", e.getMessage());
         }
       }
     });
