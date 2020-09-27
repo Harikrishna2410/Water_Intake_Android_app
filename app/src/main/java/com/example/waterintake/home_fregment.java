@@ -111,6 +111,7 @@ public class home_fregment extends Fragment {
     args.putString(ARG_PARAM2, param2);
     fragment.setArguments(args);
     return fragment;
+
   }
 
   public home_fregment() {
@@ -215,20 +216,6 @@ public class home_fregment extends Fragment {
 
     getTodaysData();
 
-//  ENDS SECOND RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
-
-
-    sp = new sharedPreference(getActivity());
-
-    intake_level_home_frag.setText(intake + "\nml");
-
-    waveloadingprogress();
-
-//    showRealmData();
-    return root;
-  }
-
-  public void getTodaysData(){
     daily_histories = realm.where(Daily_history.class).findAll();
     Log.d("trrrue", String.valueOf(daily_histories));
 
@@ -236,7 +223,7 @@ public class home_fregment extends Fragment {
       DailyHistory dailyHistory = new DailyHistory();
 
       String date = Constants.DATE_FORMAT.format(daily_histories.get(i).getDatetime());
-      String time = Constants.TIME_FORMAT.format(daily_histories.get(i).getDatetime());
+
       String currentdate = Constants.DATE_FORMAT.format(Constants.calender.getTime());
       if (date.equals(currentdate)) {
         Log.d("trrrue", String.valueOf(daily_histories.get(i)));
@@ -252,6 +239,29 @@ public class home_fregment extends Fragment {
     todays_history.setLayoutManager(layoutManager1);
     todays_history.setNestedScrollingEnabled(false);
     todays_history.setAdapter(todays_history_rv_adapter);
+
+
+
+//  ENDS SECOND RECYCLERVIEW ADAPTER DATA---------------------------------------------------------------------------------------------
+
+
+    sp = new sharedPreference(getActivity());
+
+    intake_level_home_frag.setText(intake + "\nml");
+
+    waveloadingprogress();
+
+//    showRealmData();
+    return root;
+  }
+
+  public void Refresh_history_adapter(){
+    todays_history_rv_adapter.notifyDataSetChanged();
+    todays_history.invalidate();
+  }
+
+  public void getTodaysData(){
+
   }
 
   public void customIntakeAlert() {

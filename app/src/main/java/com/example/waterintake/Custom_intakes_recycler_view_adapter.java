@@ -60,6 +60,8 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
     this.fragmentActivity = fragmentActivity;
     realm = Realm.getDefaultInstance();
     this.customWaterIntake_pojo = customWaterIntake_pojo;
+
+
   }
 
   public Custom_intakes_recycler_view_adapter(Context context, int id[], int ml, int img[]) {
@@ -123,7 +125,7 @@ public class Custom_intakes_recycler_view_adapter extends RecyclerView.Adapter<C
             notifyDataSetChanged();
             hf = new home_fregment();
             hf.waveloadingprogress();
-            home_fregment.todays_history_rv_adapter.notifyDataSetChanged();
+            home_fregment.getInstace().Refresh_history_adapter();
             realm.refresh();
 
           }

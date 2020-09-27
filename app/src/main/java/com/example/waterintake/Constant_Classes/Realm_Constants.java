@@ -1,4 +1,4 @@
-package com.example.waterintake.Realm_Constants;
+package com.example.waterintake.Constant_Classes;
 
 import com.example.waterintake.realm_db.Custom_water_intake;
 import com.example.waterintake.realm_db.Daily_history;

@@ -24,7 +24,6 @@ import com.astritveliu.boom.Boom;
 import com.example.waterintake.Constants;
 import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.R;
-import com.example.waterintake.Realm_Constants.Realm_Constants;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.sharedPreference;
 import com.example.waterintake.todays_history_rv_adapter;
@@ -34,14 +33,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -55,7 +51,7 @@ import io.realm.RealmResults;
 public class Weekly_History_Fragment extends Fragment {
   ViewGroup root;
   ConstraintLayout btn_change_date;
-  TextView tv_date,tv_WeeklyTotal;
+  TextView tv_date, tv_WeeklyTotal;
   BarChart barChart;
   BarEntry barEntry;
   BarData barData;
@@ -77,6 +73,10 @@ public class Weekly_History_Fragment extends Fragment {
   static long l2 = 0;
   ArrayList<DailyHistory> Weekly_History = new ArrayList<>();
   sharedPreference sp;
+
+  public static Weekly_History_Fragment instance;
+
+  public static Date fromdate;
 
 
   // TODO: Rename parameter arguments, choose names that match
@@ -119,19 +119,26 @@ public class Weekly_History_Fragment extends Fragment {
     }
   }
 
+  public static Weekly_History_Fragment getInstace() {
+    return instance;
+  }
+
+
   @SuppressLint("SetTextI18n")
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
     root = (ViewGroup) inflater.inflate(R.layout.fragment_weekly__history_, container, false);
+    instance = this;
     btn_change_date = root.findViewById(R.id.date_change_weekly_history);
     tv_date = root.findViewById(R.id.tv_intake_total_in_ml);
     recyclerView = root.findViewById(R.id.rv_weekly_history);
     weekly_barChart = root.findViewById(R.id.weekly_barChart);
-    tv_WeeklyTotal = root.findViewById(R.id.tv_WeeklyTotal);
 
     sp = new sharedPreference(getActivity());
+    sp.editor_client_pref.putBoolean("weeklyreport", true);
+    sp.editor_client_pref.commit();
 
     realm = Realm.getDefaultInstance();
 
@@ -140,21 +147,22 @@ public class Weekly_History_Fragment extends Fragment {
     month = c.get(Calendar.MONTH);
     day = c.get(Calendar.DAY_OF_MONTH);
 
-    c.set(Calendar.HOUR_OF_DAY,0);
-    c.set(Calendar.MINUTE,0);
-    c.set(Calendar.SECOND,0);
-    c.set(Calendar.MILLISECOND,0);
+    c.set(Calendar.HOUR_OF_DAY, 0);
+    c.set(Calendar.MINUTE, 0);
+    c.set(Calendar.SECOND, 0);
+    c.set(Calendar.MILLISECOND, 0);
+    c.add(Calendar.DATE, -7);
 
 
     currentDate = new Date();
     Calendar b = Calendar.getInstance();
     b.setTime(currentDate);
-    b.set(Calendar.HOUR_OF_DAY,0);
-    b.set(Calendar.MINUTE,0);
-    b.set(Calendar.SECOND,0);
-    b.set(Calendar.MILLISECOND,0);
+    b.set(Calendar.HOUR_OF_DAY, 0);
+    b.set(Calendar.MINUTE, 0);
+    b.set(Calendar.SECOND, 0);
+    b.set(Calendar.MILLISECOND, 0);
 
-    b.add(Calendar.DATE, 6);
+    b.add(Calendar.DATE, 0);
 
     currentDate = c.getTime();
 
@@ -175,27 +183,29 @@ public class Weekly_History_Fragment extends Fragment {
             startdate.set(Calendar.YEAR, year);
             startdate.set(Calendar.MONTH, month);
             startdate.set(Calendar.DAY_OF_MONTH, day);
-            startdate.set(Calendar.HOUR_OF_DAY,0);
-            startdate.set(Calendar.MINUTE,0);
-            startdate.set(Calendar.SECOND,0);
-            startdate.set(Calendar.MILLISECOND,0);
-            startdate.add(Calendar.DATE, 6);
+            startdate.set(Calendar.HOUR_OF_DAY, 0);
+            startdate.set(Calendar.MINUTE, 0);
+            startdate.set(Calendar.SECOND, 0);
+            startdate.set(Calendar.MILLISECOND, 0);
+            startdate.add(Calendar.DATE, 0);
+            fromdate = startdate.getTime();
 
             Date currentdate = startdate.getTime();
             Calendar enddate = Calendar.getInstance();
             enddate.setTime(currentdate);
-            enddate.set(Calendar.HOUR_OF_DAY,0);
-            enddate.set(Calendar.MINUTE,0);
-            enddate.set(Calendar.SECOND,0);
-            enddate.set(Calendar.MILLISECOND,0);
+            enddate.set(Calendar.HOUR_OF_DAY, 0);
+            enddate.set(Calendar.MINUTE, 0);
+            enddate.set(Calendar.SECOND, 0);
+            enddate.set(Calendar.MILLISECOND, 0);
             enddate.add(Calendar.DATE, 6);
 
             finalenddate = enddate.getTime();
 
-            tv_date.setText(dateFormat.format(startdate.getTime()) + " To " + dateFormat.format(finalenddate));
+            tv_date.setText(dateFormat.format(fromdate) + " To " + dateFormat.format(finalenddate));
             Weekly_History.clear();
             todays_history_rv_adapter.notifyDataSetChanged();
-            GetWeeklyData();
+            GetWeeklyData(fromdate, finalenddate);
+            MpChartDisplay();
 
           }
         }, year, month, day);
@@ -203,22 +213,24 @@ public class Weekly_History_Fragment extends Fragment {
       }
     });
 
-        MpChartDisplay();
+    MpChartDisplay();
 
     Toast.makeText(getActivity(), String.valueOf(Constants.FULL_DATE_FORMAT.format(currentDate)), Toast.LENGTH_SHORT).show();
     Toast.makeText(getActivity(), String.valueOf(Constants.FULL_DATE_FORMAT.format(finalenddate)), Toast.LENGTH_SHORT).show();
 
 
-    GetWeeklyData();
+    GetWeeklyData(currentDate, finalenddate);
 
     new Boom(btn_change_date);
 
     return root;
   }
+
   static int WeeklyTotal;
-  public void GetWeeklyData(){
-    Weekly_histories = realm.where(Daily_history.class).between("datetime",currentDate,finalenddate).findAll();
-    Log.i("WeeklyData",Weekly_histories.toString());
+
+  public void GetWeeklyData(Date fromDate, Date toDate) {
+    Weekly_histories = realm.where(Daily_history.class).between("datetime", fromDate, toDate).findAll();
+    Log.i("WeeklyData", Weekly_histories.toString());
     System.out.println(Weekly_histories.toString());
 
 //    WeeklyTotal = Weekly_histories.sum("water_intake_level").intValue();
@@ -240,70 +252,67 @@ public class Weekly_History_Fragment extends Fragment {
   }
 
   Date temp;
-  String cdatedatabase,s,fdate;
+  String cdatedatabase, s, fdate;
 
   public void MpChartDisplay() {
 //    weekly_histroy = realm.where(Daily_history.class).equalTo("date", spdate);
 
     RealmResults<Daily_history> WeeklyDistinctDataForChart = realm.where(Daily_history.class)
-      .between("datetime",currentDate,finalenddate)
+      .between("datetime", currentDate, finalenddate)
       .findAll();
-    
+
     ArrayList<DailyHistory> abc = new ArrayList<>();
     temp = currentDate;
     s = Constants.DATE_FORMAT.format(temp);
     fdate = Constants.DATE_FORMAT.format(finalenddate);
-    int WTotal = 0,tempt;
-    for (int i=0;i<WeeklyDistinctDataForChart.size();i++){
-      cdatedatabase = Constants.DATE_FORMAT.format(WeeklyDistinctDataForChart.get(i).getDatetime());
-      if (s.equals(cdatedatabase)){
-        DailyHistory dailyHistory = new DailyHistory();
+    int WTotal = 0, tempt;
 
-        tempt = WeeklyDistinctDataForChart.get(i).getWater_intake_level();
-        WTotal= tempt + WTotal;
-        System.out.println(WTotal);
+    Calendar start = Calendar.getInstance();
+    Calendar end = Calendar.getInstance();
+    start.setTime(currentDate);
+    end.setTime(finalenddate);
 
-//        dailyHistory.setId(WeeklyDistinctDataForChart.get(i).getId());
-//        dailyHistory.setDatetime(WeeklyDistinctDataForChart.get(i).getDatetime());
-//        dailyHistory.setWater_intake_level(WeeklyDistinctDataForChart.get(i).getWater_intake_level());
-//        abc.add(dailyHistory);
-//        System.out.println(WeeklyDistinctDataForChart.sum("water_intake_level").intValue());
-//        System.out.println(abc);
-        if (s.equals(fdate)){
+    List<Integer> chartdata = new ArrayList<>();
 
-          Calendar c = Calendar.getInstance();
-          c.setTime(temp);
-          c.add(Calendar.DATE,1);
-          temp = c.getTime();
+    int total = 0;
+    RealmResults<Daily_history> usersquery = realm.where(Daily_history.class).findAll();
+    while (start.before(end)) {
+
+      for (int i = 0; i < usersquery.size(); i++) {
+
+        String str_date = Constants.DATE_FORMAT.format(usersquery.get(i).getDatetime());
+        String currentdate = Constants.DATE_FORMAT.format(start.getTime());
+
+        if (currentdate.equals(str_date)) {
+          int temp = usersquery.get(i).getWater_intake_level();
+          Log.d("usersquery", String.valueOf(temp) + "| Date :-" + String.valueOf(usersquery.get(i).getDatetime()));
+          total = temp+total;
         }
       }
-
-
+      Log.w("Date_&_Total",Constants.DATE_FORMAT.format(start.getTime())+" | "+String.valueOf(total));
+      chartdata.add(total);
+      total = 0;
+      start.add(Calendar.DATE, 1);
     }
 
-//    RealmResults<Daily_history> d =
-    System.out.println(WeeklyDistinctDataForChart);
+    realm.setAutoRefresh(true);
+    weekly_total = new ArrayList<>();
 
+    for (int j = 0;j<chartdata.size();j++){
+      weekly_total.add(new BarEntry(j, chartdata.get(j)));
+    }
 
-//    int results = WeeklyTotal;
-//    realm.setAutoRefresh(true);
-//    weekly_barChart.invalidate();
-//    weekly_barChart.notifyDataSetChanged();
-//
-//    weekly_total = new ArrayList<>();
-//    weekly_total.add(new BarEntry(results, results));
-//
-//    weekly_barChart.notifyDataSetChanged();
-//    weekly_barChart.invalidate();
-//
-//    weekly_barDataSet = new BarDataSet(weekly_total, "Todays Total Intake");
-//    weekly_barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-//    weekly_barDataSet.setValueTextColor(Color.BLACK);
-//    weekly_barDataSet.setValueTextSize(16f);
-//
-//    weekly_barData = new BarData(weekly_barDataSet);
-//    weekly_barChart.setFitBars(true);
-//    weekly_barChart.setData(weekly_barData);
-//    weekly_barChart.animate();
+    weekly_barChart.notifyDataSetChanged();
+    weekly_barChart.invalidate();
+
+    weekly_barDataSet = new BarDataSet(weekly_total, "Weekly Intake");
+    weekly_barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+    weekly_barDataSet.setValueTextColor(Color.BLACK);
+    weekly_barDataSet.setValueTextSize(12f);
+
+    weekly_barData = new BarData(weekly_barDataSet);
+    weekly_barChart.setFitBars(true);
+    weekly_barChart.setData(weekly_barData);
+    weekly_barChart.animate();
   }
 }

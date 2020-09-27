@@ -56,14 +56,20 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
 
   @Override
   public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
+    sp = new sharedPreference(fragmentActivity);
 
     String time_in_PMAM = Constants.TIME_FORMAT.format(list.get(position).getDatetime());
 
-    holder.tv_time.setText(time_in_PMAM);
+
+    if (sp.client_pref.getBoolean("weeklyreport",false)==true) {
+      holder.tv_time.setText(Constants.FULL_DATE_FORMAT_FOR_REPORTS.format(list.get(position).getDatetime()));
+    }
+    else{
+      holder.tv_time.setText(time_in_PMAM);
+    }
     holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level()) + "\nml");
     holder.tv_id.setText(String.valueOf(list.get(position).getId()));
     holder.tv_id.setVisibility(View.GONE);
-    sp = new sharedPreference(fragmentActivity);
 
     if (sp.client_pref.getBoolean("deleteBtnVisible", false) == true) {
       holder.delete_btn.setVisibility(View.GONE);
