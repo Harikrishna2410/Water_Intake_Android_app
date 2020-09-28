@@ -14,5 +14,8 @@ public class Realm_Constants {
   public final static RealmResults<Users> ALL_USERS = realm.where(Users.class).findAll();
   public final static RealmResults<Custom_water_intake> ALL_CUSTOM_WATER_INTAKES = realm.where(Custom_water_intake.class).findAll();
 
+
+  public final static Users ONE_USER = realm.where(Users.class).equalTo("id",1).findFirst();
+
 }
 

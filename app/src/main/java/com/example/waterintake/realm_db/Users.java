@@ -25,6 +25,13 @@ public class Users extends RealmObject {
     this.goal = goal;
   }
 
+  public Users(String name, String gender, int weight, String activity_lvl) {
+    this.name = name;
+    this.gender = gender;
+    this.weight = weight;
+    this.activity_lvl = activity_lvl;
+  }
+
   public int getId() {
     return id;
   }

@@ -62,6 +62,7 @@ public class Home_screen extends AppCompatActivity {
             fragment = new settings_fragment();
             break;
           case R.id.profile:
+            fragment = new Profile_Fragment();
             break;
         }
 
