@@ -23,5 +23,15 @@
     <item>Yearly</item>
   </array>
 
+  <array name="units" textAlignment="center">
+    <item>Oz</item>
+    <item>ml</item>
+    <item>L</item>
+  </array>
+  <array name="weight" >
+    <item>Kg</item>
+    <item>lbs</item>
+  </array>
+
 
 </resources>

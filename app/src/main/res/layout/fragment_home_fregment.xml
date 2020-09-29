@@ -1,205 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+  android:scrollbars="vertical"
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   xmlns:wave="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/white"
   tools:context=".home_fregment">
 
-  <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/guideline12"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="0.92" />
-
-  <!-- TODO: Update blank fragment layout -->
-
-  <androidx.core.widget.NestedScrollView
-    android:id="@+id/scrollView2"
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    app:layout_constraintBottom_toTopOf="@+id/guideline12"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- TODO: Update blank fragment layout -->
+
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/scrollView2"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="0dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
 
       <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/date_change_weekly_history"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/round_circle_screen_4"
-        android:backgroundTint="@color/white"
-        android:elevation="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-          android:id="@+id/tv_intake_total_in_ml"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="16dp"
-          android:fontFamily="@font/roboto"
-          android:gravity="center"
-          android:text="1650\nml"
-          android:textColor="@color/black"
-          android:textSize="12sp"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-        <TextView
-          android:id="@+id/textView13"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="15dp"
-          android:fontFamily="@font/montserrat"
-          android:text="Current"
-          android:textAlignment="center"
-          android:textColor="@color/black"
-          android:textSize="16sp"
-          android:textStyle="bold"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-      <TextView
-        android:id="@+id/title_home_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="@font/montserrat"
-        android:text="Your Daily Water Intake"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/round_circle_screen_4"
-        android:backgroundTint="@color/white"
-        android:elevation="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-          android:id="@+id/intake_level_home_frag"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="16dp"
-          android:fontFamily="@font/roboto"
-          android:gravity="center"
-          android:text="2224\nml"
-          android:textColor="@color/black"
-          android:textSize="12sp"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
-        <TextView
-          android:id="@+id/textView9"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="15dp"
-          android:fontFamily="@font/montserrat"
-          android:text="Total"
-          android:textAlignment="center"
-          android:textColor="@color/black"
-          android:textSize="16sp"
-          android:textStyle="bold"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
-
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
-      <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/round_circle_screen_4"
-        android:backgroundTint="@color/white"
-        android:elevation="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_home_fragment">
-
-        <me.itangqi.waveloadingview.WaveLoadingView
-          android:id="@+id/waveLoadingView"
-          android:layout_width="250dp"
-          android:layout_height="250dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:id="@+id/date_change_weekly_history"
+          android:layout_width="80dp"
+          android:layout_height="80dp"
+          android:layout_marginTop="16dp"
+          android:layout_marginEnd="16dp"
+          android:background="@drawable/round_circle_screen_4"
+          android:backgroundTint="@color/white"
           android:elevation="15dp"
-          app:wlv_borderColor="@color/colorAccent"
-          app:wlv_borderWidth="0dp"
-          app:wlv_progressValue="40"
-          app:wlv_round_rectangle="true"
-          app:wlv_shapeType="circle"
-          app:wlv_titleCenter="Center Title"
-          app:wlv_titleCenterColor="@color/black"
-          app:wlv_titleCenterSize="24sp"
-          app:wlv_titleCenterStrokeWidth="3dp"
-          app:wlv_triangle_direction="north"
-          app:wlv_waveAmplitude="70"
-          app:wlv_waveColor="@color/colorAccent" />
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
 
-      </LinearLayout>
+          <TextView
+            android:id="@+id/tv_intake_total_in_ml"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:text="1650\nml"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/todays_histroy"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:overScrollMode="never"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/curent_history" />
+          <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Current"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <TextView
-        android:id="@+id/curent_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/montserrat"
-        android:text="Daily Histroy"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/todays_histroy"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_intake" />
+        <TextView
+          android:id="@+id/title_home_fragment"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="32dp"
+          android:fontFamily="@font/montserrat"
+          android:text="Your Daily Water Intake"
+          android:textColor="@color/black"
+          android:textSize="15dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
 
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/custom_intake"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="80dp"
+          android:layout_height="80dp"
+          android:layout_marginStart="16dp"
+          android:layout_marginTop="16dp"
+          android:background="@drawable/round_circle_screen_4"
+          android:backgroundTint="@color/white"
+          android:elevation="15dp"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </androidx.core.widget.NestedScrollView>
+          <TextView
+            android:id="@+id/intake_level_home_frag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:text="2224\nml"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+          <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/montserrat"
+            android:text="Total"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+          android:id="@+id/linearLayout"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:background="@drawable/round_circle_screen_4"
+          android:backgroundTint="@color/white"
+          android:elevation="15dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/title_home_fragment">
+
+          <me.itangqi.waveloadingview.WaveLoadingView
+            android:id="@+id/waveLoadingView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:elevation="15dp"
+            app:wlv_borderColor="@color/colorAccent"
+            app:wlv_borderWidth="0dp"
+            app:wlv_progressValue="40"
+            app:wlv_round_rectangle="true"
+            app:wlv_shapeType="circle"
+            app:wlv_titleCenter="Center Title"
+            app:wlv_titleCenterColor="@color/black"
+            app:wlv_titleCenterSize="24sp"
+            app:wlv_titleCenterStrokeWidth="3dp"
+            app:wlv_triangle_direction="north"
+            app:wlv_waveAmplitude="70"
+            app:wlv_waveColor="@color/colorAccent" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/todays_histroy"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:overScrollMode="never"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.0"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/curent_history" />
+
+        <TextView
+          android:id="@+id/curent_history"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:fontFamily="@font/montserrat"
+          android:text="Daily Histroy"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="15sp"
+          app:layout_constraintBottom_toTopOf="@+id/todays_histroy"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/custom_intake" />
+
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/custom_intake"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="24dp"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -1,5 +1,6 @@
 package com.example.waterintake.History;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -12,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.waterintake.Constant_Classes.MPChart;
 import com.example.waterintake.Constants;
+import com.example.waterintake.Converter;
 import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.R;
+import com.example.waterintake.WaveVariable;
 import com.example.waterintake.home_fregment;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.sharedPreference;
@@ -52,6 +56,7 @@ public class Todays_History_Fragment extends Fragment{
   public static RealmQuery<Daily_history> usersquery;
   ArrayList<DailyHistory> today_history = new ArrayList<>();
   String Error = "Error in Todays History Fragment";
+  static Context context;
 
 
   // TODO: Rename parameter arguments, choose names that match
@@ -101,6 +106,9 @@ public class Todays_History_Fragment extends Fragment{
     root = (ViewGroup) inflater.inflate(R.layout.fragment_todays__history_, container, false);
     recyclerView = root.findViewById(R.id.rv_today_history);
     barChart = root.findViewById(R.id.barChart);
+    context = getActivity();
+
+    WaveVariable.setTodays_Barchart(barChart);
 
     realm = Realm.getDefaultInstance();
     sp = new sharedPreference(getActivity());
@@ -139,7 +147,8 @@ public class Todays_History_Fragment extends Fragment{
       Log.e(Error,e.getMessage());
     }
 
-    MpChartDisplay();
+//    MpChartDisplay();
+    MPChart.Todays_MPChartDisplay(getActivity());
 
     return root;
   }
@@ -152,7 +161,7 @@ public class Todays_History_Fragment extends Fragment{
     realm.setAutoRefresh(true);
 
     total = new ArrayList<>();
-    total.add(new BarEntry(results,results));
+    total.add(new BarEntry(0, results));
 
     barChart.notifyDataSetChanged();
     barChart.invalidate();

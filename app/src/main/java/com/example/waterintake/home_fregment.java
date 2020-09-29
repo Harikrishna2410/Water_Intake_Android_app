@@ -247,7 +247,7 @@ public class home_fregment extends Fragment {
 
     sp = new sharedPreference(getActivity());
 
-    intake_level_home_frag.setText(intake + "\nml");
+    intake_level_home_frag.setText(Converter.UNIT_CONVERTER(getActivity(),intake) + "\n" + sp.client_pref.getString("default_unit",null));
 
     waveloadingprogress();
 
@@ -342,7 +342,7 @@ public class home_fregment extends Fragment {
 //    sp.editor_client_pref.commit();
 //    Log.i("Total",String.valueOf(total));
 
-    tv_intake_total_in_ml.setText(String.valueOf(total) + "\nml");
+    tv_intake_total_in_ml.setText(Converter.UNIT_CONVERTER(getActivity(),total) + "\n" + sp.client_pref.getString("default_unit",null));
 
     percent = (total * 100) / intake;
     Log.d("percent", String.valueOf(percent));

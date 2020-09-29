@@ -21,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.Constant_Classes.MPChart;
 import com.example.waterintake.Constants;
 import com.example.waterintake.Modal_Classis.DailyHistory;
 import com.example.waterintake.R;
+import com.example.waterintake.WaveVariable;
 import com.example.waterintake.realm_db.Daily_history;
 import com.example.waterintake.sharedPreference;
 import com.example.waterintake.todays_history_rv_adapter;
@@ -136,6 +138,8 @@ public class Weekly_History_Fragment extends Fragment {
     recyclerView = root.findViewById(R.id.rv_weekly_history);
     weekly_barChart = root.findViewById(R.id.weekly_barChart);
 
+    WaveVariable.setMonthly_Barchart(weekly_barChart);
+
     sp = new sharedPreference(getActivity());
     sp.editor_client_pref.putBoolean("weeklyreport", true);
     sp.editor_client_pref.commit();
@@ -205,15 +209,17 @@ public class Weekly_History_Fragment extends Fragment {
             Weekly_History.clear();
             todays_history_rv_adapter.notifyDataSetChanged();
             GetWeeklyData(fromdate, finalenddate);
-            MpChartDisplay();
+            MPChart.Monthly_MPChartDisplay(getActivity(),currentDate,finalenddate,"Weekly Intakes");
+//            MpChartDisplay();
 
           }
         }, year, month, day);
         dp.show();
       }
     });
+    MPChart.Monthly_MPChartDisplay(getActivity(),currentDate,finalenddate,"Weekly Intakes");
 
-    MpChartDisplay();
+//    MpChartDisplay();
 
     Toast.makeText(getActivity(), String.valueOf(Constants.FULL_DATE_FORMAT.format(currentDate)), Toast.LENGTH_SHORT).show();
     Toast.makeText(getActivity(), String.valueOf(Constants.FULL_DATE_FORMAT.format(finalenddate)), Toast.LENGTH_SHORT).show();

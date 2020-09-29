@@ -200,12 +200,11 @@ public class Screen_2 extends AppCompatActivity {
 
 
 //
-//          sp.editor_client_pref.putString("username",uname);
-//          sp.editor_client_pref.putString("gender",sex);
-//          sp.editor_client_pref.putString("weight",Integer.parseInt(uweight));
-//          sp.editor_client_pref.putString("activity_level",uactivity);
-//          sp.editor_client_pref.putString("weather",uweather);
-//          sp.editor_client_pref.putFloat("todays_intake",0);
+          sp.editor_client_pref.putString("default_unit","Oz");
+          sp.editor_client_pref.putString("default_weight","Kg");
+          sp.editor_client_pref.putBoolean("alarm",false);
+          sp.editor_client_pref.putBoolean("notification",false);
+          sp.editor_client_pref.commit();
 
           int resultInMl;
           float genderMultiplier = (sex == "Male") ? 20 : 10;

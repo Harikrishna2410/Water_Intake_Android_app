@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astritveliu.boom.Boom;
+import com.example.waterintake.Constant_Classes.MPChart;
 import com.example.waterintake.History.Todays_History_Fragment;
 import com.example.waterintake.History.Weekly_History_Fragment;
 import com.example.waterintake.Modal_Classis.DailyHistory;
@@ -67,7 +68,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
     else{
       holder.tv_time.setText(time_in_PMAM);
     }
-    holder.tv_ml.setText(String.valueOf(list.get(position).getWater_intake_level()) + "\nml");
+    holder.tv_ml.setText(Converter.UNIT_CONVERTER(fragmentActivity,list.get(position).getWater_intake_level()) + "\n" + sp.client_pref.getString("default_unit",null));
     holder.tv_id.setText(String.valueOf(list.get(position).getId()));
     holder.tv_id.setVisibility(View.GONE);
 
@@ -113,7 +114,7 @@ public class todays_history_rv_adapter extends RecyclerView.Adapter<todays_histo
                 Log.e("delete data", results.toString());
                 notifyDataSetChanged();
                 home_fregment.getInstace().waveloadingprogress();
-                Todays_History_Fragment.MpChartDisplay();
+                MPChart.Todays_MPChartDisplay(fragmentActivity);
                 if (sp.client_pref.getBoolean("deleteBtnVisible", false) == false) {
                   Weekly_History_Fragment WHF = new Weekly_History_Fragment();
                   WHF.MpChartDisplay();

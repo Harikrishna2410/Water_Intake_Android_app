@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +17,9 @@ import android.view.Window;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +30,7 @@ import com.kevalpatel2106.rulerpicker.RulerValuePickerListener;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 import io.realm.Realm;
@@ -41,6 +46,7 @@ public class Profile_Fragment extends Fragment {
   TextView uweight, uname, ugender, uactivity_lvl, ugoal;
   int weight = 0;
   ListView activity_level_list;
+  sharedPreference sp;
 
   ConstraintLayout uname_change, weight_change, activity_level_change, gender_change;
 
@@ -52,6 +58,7 @@ public class Profile_Fragment extends Fragment {
   // TODO: Rename and change types of parameters
   private String mParam1;
   private String mParam2;
+  public static RulerValuePicker RVP;
 
   public Profile_Fragment() {
     // Required empty public constructor
@@ -99,6 +106,8 @@ public class Profile_Fragment extends Fragment {
     ugender = root.findViewById(R.id.profile_user_gender);
     ugoal = root.findViewById(R.id.profile_Goal);
 
+    sp = new sharedPreference(getActivity());
+
     Refresh_Data();
 
     final String[] activity_level_arrayList, gender_arrayList;
@@ -136,6 +145,8 @@ public class Profile_Fragment extends Fragment {
         d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.getWindow().setGravity(Gravity.BOTTOM);
         activity_level_list = d.findViewById(R.id.activity_level_list);
+        TextView Dialog_Title = d.findViewById(R.id.activity_level_title);
+        Dialog_Title.setText("Select Gender");
         activity_level_list.setAdapter(adapter1);
 
         activity_level_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -207,8 +218,30 @@ public class Profile_Fragment extends Fragment {
     Change_Username_Object.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Refresh_Data();
+        final Dialog d = new Dialog(getActivity());
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        d.setContentView(R.layout.custom_input_dialog);
+        d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        d.getWindow().setGravity(Gravity.BOTTOM);
+        EditText editText = d.findViewById(R.id.custom_input_dialog_edittext);
+        TextView Dialog_Title = d.findViewById(R.id.custom_input_dialog_title);
+        LinearLayout btn = d.findViewById(R.id.custom_input_dialog_save_btn);
+        editText.setText(String.valueOf(Realm_Constants.ONE_USER.getName()));
+        Dialog_Title.setText("Enter Your Name");
+        new Boom(btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Realm_Constants.realm.beginTransaction();
+            Realm_Constants.ONE_USER.setName(editText.getText().toString());
+            Realm_Constants.realm.commitTransaction();
+            Refresh_Data();
+            d.dismiss();
+          }
+        });
 
+        d.show();
       }
     });
   }
@@ -224,9 +257,10 @@ public class Profile_Fragment extends Fragment {
         d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         d.getWindow().setGravity(Gravity.BOTTOM);
-        RulerValuePicker RVP = d.findViewById(R.id.ruler_picker);
+        RVP = d.findViewById(R.id.ruler_picker);
         TextView Ruler_Title = d.findViewById(R.id.Ruler_Title);
-        RVP.selectValue(Realm_Constants.ONE_USER.getWeight());
+        WaveVariable.setRulerValuePicker(RVP);
+        RVP.selectValue(Integer.parseInt(String.valueOf(Converter.WEIGHT_CONVERTOR(getActivity(), Realm_Constants.ONE_USER.getWeight()))));
         RVP.setValuePickerListener(new RulerValuePickerListener() {
           @Override
           public void onValueChange(final int selectedValue) {
@@ -236,16 +270,24 @@ public class Profile_Fragment extends Fragment {
 
           @Override
           public void onIntermediateValueChange(final int selectedValue) {
-            uweight.setText(selectedValue + " Kg");
-            uweight.setError(null);
-            weight = selectedValue;
-            Ruler_Title.setText("Your Weight " + selectedValue + " Kg");
+
+//            int value = Converter.WEIGHT_CONVERTOR(getActivity(), selectedValue);
+
+            uweight.setText(selectedValue + " " + sp.client_pref.getString("default_weight", null));
+//            uweight.setError(null);
+            Ruler_Title.setText("Your Weight " + selectedValue + " " + sp.client_pref.getString("default_weight", null));
+
 
             Realm_Constants.realm.beginTransaction();
-            Realm_Constants.ONE_USER.setWeight(selectedValue);
+            if (sp.client_pref.getString("default_weight", null).equals("lbs")) {
+              Realm_Constants.ONE_USER.setWeight(Integer.parseInt(String.valueOf(Converter.WEIGHT_CONVERTOR_LBS_TO_KG(getActivity(), selectedValue))));
+            } else {
+              Realm_Constants.ONE_USER.setWeight(Integer.parseInt(String.valueOf(selectedValue)));
+            }
             Realm_Constants.realm.commitTransaction();
             Calculate_Goal();
-            Refresh_Data();
+//            Refresh_Data();
+            ugoal.setText(Converter.UNIT_CONVERTER(getActivity(), Realm_Constants.ONE_USER.getGoal()) + " " + sp.client_pref.getString("default_unit", null));
 
           }
         });
@@ -255,15 +297,13 @@ public class Profile_Fragment extends Fragment {
     });
   }
 
-
-
-  public void Calculate_Goal(){
+  public void Calculate_Goal() {
     int resultInMl;
     float genderMultiplier = (Realm_Constants.ONE_USER.getGender().equals("Male")) ? 20 : 10;
     float resultInOunces = Realm_Constants.ONE_USER.getWeight() * genderMultiplier / 28.3f;
     float activityAdder = 0;
 
-    switch (Realm_Constants.ONE_USER.getActivity_lvl()){
+    switch (Realm_Constants.ONE_USER.getActivity_lvl()) {
       case "Steady":
         activityAdder = 100;
         break;
@@ -288,13 +328,19 @@ public class Profile_Fragment extends Fragment {
     Realm_Constants.realm.commitTransaction();
   }
 
-  public void Refresh_Data(){
+  public void Refresh_Data() {
     if (Realm_Constants.ONE_USER != null) {
       ugender.setText(String.valueOf(Realm_Constants.ONE_USER.getGender()));
-      uweight.setText(String.valueOf(Realm_Constants.ONE_USER.getWeight()));
       uactivity_lvl.setText(String.valueOf(Realm_Constants.ONE_USER.getActivity_lvl()));
       uname.setText(String.valueOf(Realm_Constants.ONE_USER.getName()));
-      ugoal.setText(Realm_Constants.ONE_USER.getGoal()+" Ml");
+      uweight.setText("");
+
+      if (sp.client_pref.getString("default_weight", null).equals("lbs")) {
+        uweight.setText(Converter.WEIGHT_CONVERTOR(getActivity(),Realm_Constants.ONE_USER.getWeight()) + " " + sp.client_pref.getString("default_weight", null));
+      } else {
+        uweight.setText(Realm_Constants.ONE_USER.getWeight() + " " + sp.client_pref.getString("default_weight", null));
+      }
+      ugoal.setText(Converter.UNIT_CONVERTER(getActivity(), Realm_Constants.ONE_USER.getGoal()) + " " + sp.client_pref.getString("default_unit", null));
     }
   }
 

@@ -1,5 +1,6 @@
 package com.example.waterintake;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -19,6 +20,10 @@ public class Constants {
 
   public static final Calendar calender = Calendar.getInstance();
   public static final String TRY_CATCH_MONTHLY_HISTORY_FRAGMENT= "TRY_CATCH_MONTHLY_HISTORY_FRAGMENT";
+
+
+  public static final DecimalFormat DF2 = new DecimalFormat("#.##");
+  public static final DecimalFormat DF0 = new DecimalFormat("#");
 
 
 

@@ -178,7 +178,7 @@ public class Monthly_History_Framgment extends Fragment {
               Monthly_History.clear();
               todays_history_rv_adapter.notifyDataSetChanged();
               GetMonthlyData(fromDate, toDate);
-              MPChart.Monthly_MPChartDisplay(fromDate, toDate, "Monthly Intake");
+              MPChart.Monthly_MPChartDisplay(getActivity(),fromDate, toDate, "Monthly Intake");
             }
           })
           .setNegativeButton(new OnCancelMonthDialogListener() {
@@ -192,7 +192,7 @@ public class Monthly_History_Framgment extends Fragment {
       }
     });
 
-    MPChart.Monthly_MPChartDisplay(fromDate, toDate, "Monthly Intake");
+    MPChart.Monthly_MPChartDisplay(getActivity(),fromDate, toDate, "Monthly Intake");
 
     return root;
   }

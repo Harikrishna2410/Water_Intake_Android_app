@@ -11,21 +11,21 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-    <activity android:name=".Splash_Screen">
+    <activity android:name=".Splash_Screen" android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".Home_screen"></activity>
-    <activity android:name=".Screen_4" />
-    <activity android:name=".Screen_3"></activity>
-    <activity android:name=".Screen_2" />
-    <activity android:name=".Screen_1">
+    <activity android:name=".Home_screen" android:screenOrientation="portrait"></activity>
+    <activity android:name=".Screen_4"  android:screenOrientation="portrait"/>
+    <activity android:name=".Screen_3" android:screenOrientation="portrait"></activity>
+    <activity android:name=".Screen_2" android:screenOrientation="portrait" />
+    <activity android:name=".Screen_1" android:screenOrientation="portrait">
 
     </activity>
-    <activity android:name=".MainActivity" />
+    <activity android:name=".MainActivity" android:screenOrientation="portrait" />
 
     <meta-data
       android:name="preloaded_fonts"
